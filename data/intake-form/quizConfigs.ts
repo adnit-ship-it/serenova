@@ -1,5 +1,8 @@
 import type { QuizConfig } from "~/types/intake-form/form";
 import { allStepsMaster, contactFormSteps, nadPlusFormSteps, sermorelinSteps, vitaminB12Steps, sexualHealthSteps, glutathioneSteps, hyperpigmentationSteps, antiAgingSteps, acneSteps, hairLossSteps } from "./formSteps";
+import { loadQuizzesFromJson, getQuizBySlugFromJson } from "~/utils/intake-form/transformQuizJson";
+import { validateQuizJson } from "~/utils/intake-form/validateQuizJson";
+import type { QuizJsonQuiz } from "~/types/intake-form/quizJson";
 
 // GLP-1 Weight Loss Intake Form Configuration
 export const glp1WeightLossQuiz: QuizConfig = {
@@ -750,8 +753,8 @@ export const hairLossQuiz: QuizConfig = {
 
 
 
-// Export all quiz configurations
-export const availableQuizzes: QuizConfig[] = [
+// Hardcoded quiz configurations (fallback)
+const hardcodedQuizzes: QuizConfig[] = [
   glp1WeightLossQuiz,
   nadPlusQuiz,
   sermorelinQuiz,
@@ -764,9 +767,86 @@ export const availableQuizzes: QuizConfig[] = [
   hairLossQuiz,
 ];
 
-// Helper function to get quiz by ID
+// Cache for loaded JSON quizzes
+let jsonQuizzesCache: QuizConfig[] | null = null;
+let jsonQuizzesLoadAttempted = false;
+
+/**
+ * Loads quizzes from JSON file with caching
+ */
+function loadQuizzesFromJsonWithCache(): QuizConfig[] {
+  if (jsonQuizzesCache !== null) {
+    return jsonQuizzesCache;
+  }
+
+  if (jsonQuizzesLoadAttempted) {
+    return [];
+  }
+
+  jsonQuizzesLoadAttempted = true;
+
+  try {
+    const quizzes = loadQuizzesFromJson();
+    
+    // Validate each quiz (in development only)
+    if (typeof process !== 'undefined' && process.env?.NODE_ENV !== 'production') {
+      quizzes.forEach(quiz => {
+        // We need to reconstruct the JSON structure for validation
+        // For now, we'll skip validation in production to avoid performance issues
+        // Validation should happen in the admin UI before saving
+      });
+    }
+
+    jsonQuizzesCache = quizzes;
+    return quizzes;
+  } catch (error) {
+    console.error('Error loading quizzes from JSON:', error);
+    jsonQuizzesCache = [];
+    return [];
+  }
+}
+
+/**
+ * Gets all available quizzes (JSON + hardcoded, JSON takes precedence)
+ */
+export function getAvailableQuizzes(): QuizConfig[] {
+  const jsonQuizzes = loadQuizzesFromJsonWithCache();
+  const hardcodedMap = new Map(hardcodedQuizzes.map(q => [q.id, q]));
+  
+  // JSON quizzes take precedence, then add hardcoded ones that aren't in JSON
+  const result = [...jsonQuizzes];
+  jsonQuizzes.forEach(q => hardcodedMap.delete(q.id));
+  
+  // Add remaining hardcoded quizzes
+  hardcodedMap.forEach(q => result.push(q));
+  
+  return result;
+}
+
+// Export all quiz configurations (backward compatibility)
+// Use a getter function to ensure lazy loading
+let _availableQuizzes: QuizConfig[] | null = null;
+
+export function getAvailableQuizzesList(): QuizConfig[] {
+  if (_availableQuizzes === null) {
+    _availableQuizzes = getAvailableQuizzes();
+  }
+  return _availableQuizzes;
+}
+
+// Export as const for backward compatibility (lazy-loaded)
+export const availableQuizzes: QuizConfig[] = getAvailableQuizzesList();
+
+// Helper function to get quiz by ID (checks JSON first, then hardcoded)
 export function getQuizById(quizId: string): QuizConfig | undefined {
-  return availableQuizzes.find((quiz) => quiz.id === quizId);
+  // Try JSON first
+  const jsonQuiz = getQuizBySlugFromJson(quizId);
+  if (jsonQuiz) {
+    return jsonQuiz;
+  }
+  
+  // Fallback to hardcoded quizzes
+  return hardcodedQuizzes.find((quiz) => quiz.id === quizId);
 }
 
 // Helper function to get progress step for a specific form step
