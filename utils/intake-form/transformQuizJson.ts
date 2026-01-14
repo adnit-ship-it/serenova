@@ -1,4 +1,4 @@
-import type { QuizConfig, FormStep, FormQuestion, ProgressStep, StepProgressMapping, RenderCondition } from '~/types/intake-form/form';
+import type { QuizConfig, FormStep, FormQuestion, ProgressStep, StepProgressMapping, RenderCondition, DisplayValue, FormAnswers } from '~/types/intake-form/form';
 import type { QuizJsonQuiz, FormStepJson, QuestionJson, ProgressStepJson, RenderConditionJson, QuizJson } from '~/types/intake-form/quizJson';
 
 // Static import - Nuxt will handle this at build time (same pattern as products.ts)
@@ -111,6 +111,9 @@ function transformFormStep(stepJson: FormStepJson, progressStepSlugs: Set<string
     console.warn(`Form step "${stepJson.slug}" references invalid progress step "${progressStepId}"`);
   }
 
+  // Transform displayValue if present
+  const displayValue = transformDisplayValue(stepJson.displayValue);
+
   return {
     id: stepJson.slug, // Use slug as ID
     title: stepJson.title,
@@ -127,8 +130,7 @@ function transformFormStep(stepJson: FormStepJson, progressStepSlugs: Set<string
     dynamicHeading2: stepJson.dynamicHeading2,
     dynamicSubtext: stepJson.dynamicSubtext,
     // Display value (for calculated fields like BMI)
-    // Note: displayValue uses functions in hardcoded quizzes, so we can't fully support it from JSON
-    // This would need to be handled differently if needed
+    displayValue: displayValue,
     questions: stepJson.questions
       .sort((a, b) => (a.question_order || 0) - (b.question_order || 0))
       .map(q => transformQuestion(q))
@@ -146,6 +148,80 @@ function transformRenderCondition(conditionJson: RenderConditionJson): RenderCon
       value: c.value
     })),
     logicalOperator: conditionJson.logicalOperator
+  };
+}
+
+/**
+ * Transforms a JSON displayValue structure to function-based DisplayValue format
+ */
+function transformDisplayValue(displayValueJson: FormStepJson['displayValue']): DisplayValue | undefined {
+  if (!displayValueJson) return undefined;
+
+  // Convert condition array to function (AND logic - all conditions must pass)
+  const conditionFn = (answers: FormAnswers): boolean => {
+    if (!displayValueJson.condition || displayValueJson.condition.length === 0) {
+      return true;
+    }
+    
+    return displayValueJson.condition.every(c => {
+      const fieldValue = answers[c.field];
+      switch (c.operator) {
+        case 'notEquals':
+          return fieldValue != null && fieldValue !== '' && fieldValue !== c.value;
+        case 'equals':
+          return fieldValue === c.value;
+        case 'greaterThan':
+          return Number(fieldValue) > Number(c.value);
+        case 'lessThan':
+          return Number(fieldValue) < Number(c.value);
+        default:
+          return true;
+      }
+    });
+  };
+
+  // Convert calculate config to function
+  const calculateFn = (answers: FormAnswers): string | number => {
+    if (!displayValueJson.calculate) {
+      return '';
+    }
+
+    const calc = displayValueJson.calculate;
+
+    if (calc.type === 'bmi' && calc.fields && calc.fields.length >= 3) {
+      const [feet, inches, weight] = calc.fields.map(f => answers[f]);
+      
+      // Check if all required values are present
+      if (feet == null || inches == null || weight == null) {
+        return '';
+      }
+
+      // BMI calculation: weight (kg) / height (m)^2
+      const heightInInches = Number(feet) * 12 + Number(inches);
+      const heightInMeters = heightInInches * 0.0254;
+      const weightInKg = Number(weight) * 0.453592;
+      const bmi = weightInKg / (heightInMeters * heightInMeters);
+      return bmi.toFixed(2);
+    }
+
+    if (calc.type === 'weeksToGoal' && calc.fields && calc.fields.length >= 2) {
+      // Future implementation for weeks to goal calculation
+      // This would require current weight and goal weight
+      return '';
+    }
+
+    if (calc.type === 'custom' && calc.formula) {
+      // Future implementation for custom formula evaluation
+      return '';
+    }
+
+    return '';
+  };
+
+  return {
+    condition: conditionFn,
+    calculate: calculateFn,
+    template: displayValueJson.template || '{{value}}'
   };
 }
 
