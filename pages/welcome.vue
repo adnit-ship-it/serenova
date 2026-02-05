@@ -1,5 +1,5 @@
 <template>
-  <div class="flex items-center bg-backgroundColor justify-center min-h-[96vh] pt-[83px] lg:pt-[68px]">
+  <div class="flex items-center bg-backgroundColor justify-center min-h-[96vh]">
     <div class="max-w-lg w-full bg-white shadow-lg p-8 text-center rounded-2xl">
       <div class="mb-6">
         <div

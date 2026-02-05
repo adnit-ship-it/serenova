@@ -1,5 +1,5 @@
 <template>
-  <UiSectionWrapper class="py-24 md:py-32 flex-col bg-backgroundColor">
+  <UiSectionWrapper class="pt-12 md:pt-16 pb-24 md:pb-32 flex-col bg-backgroundColor">
     <!-- Render all sections in order from pages.json -->
     <template v-for="section in pageSections" :key="section.name">
       <!-- Products Hero: Render inline content when component is null -->

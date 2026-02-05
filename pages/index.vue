@@ -1,5 +1,5 @@
 <template>
-  <div class="pt-[83px] lg:pt-[68px] bg-backgroundColor">
+  <div class="bg-backgroundColor">
 
     
     <DynamicSection 

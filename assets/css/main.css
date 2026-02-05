@@ -24,5 +24,18 @@
 @layer base {
   html {
     font-family: "Quicksand", "Inter", sans-serif;
+    
+    /* Header height defaults (overridden by Vue via inline styles) */
+    --navbar-height: 83px;
+    --announcement-height: 0px;
+    --header-offset: 83px;
+  }
+  
+  /* Tablet and desktop breakpoints */
+  @media (min-width: 768px) {
+    html {
+      --navbar-height: 68px;
+      --header-offset: 68px;
+    }
   }
 }

@@ -1,6 +1,6 @@
 <template>
   <div class="w-screen bg-backgroundColor min-h-screen flex justify-center">
-    <UiSectionContainer class="pt-40 pb-32">
+    <UiSectionContainer class="pt-12 md:pt-16 pb-32">
       <h1 class="text-accentColor1 font-semibold text-[32px]/[40px] lg:text-[42px]/[50px] uppercase mb-6 text-center">
         {{ page?.title }}
       </h1>

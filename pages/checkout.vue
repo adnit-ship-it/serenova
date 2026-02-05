@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen bg-gray-50 pt-[83px] lg:pt-[68px]">
+  <div class="min-h-screen bg-gray-50">
     <!-- Loading State -->
     <div
       v-if="isValidating"

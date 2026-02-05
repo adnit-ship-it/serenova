@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-backgroundColor py-24 md:py-32">
+  <div class="bg-backgroundColor pb-24 md:pb-32">
     <DynamicSection 
       v-for="section in pageSections"
       :key="section.name"

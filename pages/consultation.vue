@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col bg-backgroundColor min-h-[98vh] items-center relative w-full px-12 py-24 md:py-32">
+  <div class="flex flex-col bg-backgroundColor min-h-[98vh] items-center relative w-full px-12 pt-12 md:pt-16 pb-24 md:pb-32">
     <!-- Loading State -->
     <div v-if="isQuizLoading" class="flex flex-col items-center justify-center h-64">
       <svg class="animate-spin h-8 w-8 text-bodyColor" xmlns="http://www.w3.org/2000/svg" fill="none"

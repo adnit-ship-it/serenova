@@ -117,6 +117,18 @@
         },
         "text": "Loading..."
     },
+    "announcement": {
+        "enabled": true,
+        "text": "Limited time offer: 20% off your first consultation!",
+        "link": "/consultation",
+        "backgroundColor": "#750021",
+        "textColor": "#ffffff",
+        "heights": {
+            "mobile": "60px",
+            "tablet": "70px",
+            "desktop": "80px"
+        }
+    },
     "common": {
         "pageTitle": "Serenova",
              "pageDescription": "Serenova is a company that provides a service to help people lose weight.",

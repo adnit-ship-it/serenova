@@ -1,5 +1,5 @@
 <template>
-  <div class="mx-auto bg-backgroundColor min-h-[98vh] pt-28 pb-12 md:py-32 flex flex-col items-center px-4 lg:px-8 md:px-0">
+  <div class="mx-auto bg-backgroundColor min-h-[98vh] pt-12 md:pt-16 pb-12 md:pb-32 flex flex-col items-center px-4 lg:px-8 md:px-0">
     <img v-motion :initial="{ opacity: 0, y: 32 }" :visible-once="{
       opacity: 1,
       y: 0,

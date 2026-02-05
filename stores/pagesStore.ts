@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
-import type { PagesData, PageConfig, PageSectionReference } from '~/types/pages'
+import type { PagesData, PageConfig, PageSectionReference, AnnouncementConfig } from '~/types/pages'
 
 // Section data structure from sections.json
 export interface SectionData {
@@ -130,6 +130,16 @@ export const usePagesStore = defineStore('pages', () => {
     return sections.value.find(section => section.name === sectionName) || null
   }
 
+  // Announcement configuration
+  const announcement = computed((): AnnouncementConfig | null => {
+    return pages.value?.announcement || null
+  })
+
+  // Check if announcement is enabled
+  const isAnnouncementEnabled = computed((): boolean => {
+    return pages.value?.announcement?.enabled === true
+  })
+
   return {
     pages,
     sections,
@@ -143,6 +153,8 @@ export const usePagesStore = defineStore('pages', () => {
     getPageTitle,
     getPageConfig,
     getPageSections,
-    getSectionData
+    getSectionData,
+    announcement,
+    isAnnouncementEnabled
   }
 })
