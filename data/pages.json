@@ -129,6 +129,13 @@
             "desktop": "80px"
         }
     },
+    "navbar": {
+        "heights": {
+            "mobile": "83px",
+            "tablet": "68px",
+            "desktop": "68px"
+        }
+    },
     "common": {
         "pageTitle": "Serenova",
              "pageDescription": "Serenova is a company that provides a service to help people lose weight.",
@@ -164,11 +171,6 @@
         "order": 1,
         "description": "Home page",
         "navbar": {
-            "heights": {
-                "mobile": "83px",
-                "tablet": "68px",
-                "desktop": "68px"
-            },
             "logo": {
                 "src": "/assets/images/brand/logo-primary-1.svg",
                 "alt": "Serenova primary logo"
@@ -259,11 +261,6 @@
         "order": 2,
         "description": "About page",
         "navbar": {
-            "heights": {
-                "mobile": "83px",
-                "tablet": "68px",
-                "desktop": "68px"
-            },
             "logo": {
                 "src": "/assets/images/brand/logo-primary-1.svg",
                 "alt": "Serenova primary logo"
@@ -343,11 +340,6 @@
             }
         },
         "navbar": {
-            "heights": {
-                "mobile": "83px",
-                "tablet": "68px",
-                "desktop": "68px"
-            },
             "logo": {
                 "src": "/assets/images/brand/logo-primary-1.svg",
                 "alt": "Serenova primary logo"
@@ -383,11 +375,6 @@
         "order": 4,
         "description": "Products page",
         "navbar": {
-            "heights": {
-                "mobile": "83px",
-                "tablet": "68px",
-                "desktop": "68px"
-            },
             "logo": {
                 "src": "/assets/images/brand/logo-primary-1.svg",
                 "alt": "Serenova primary logo"

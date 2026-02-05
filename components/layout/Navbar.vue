@@ -135,9 +135,9 @@ const checkBreakpoints = () => {
   isTablet.value = width >= 768 && width < 1024;
 };
 
-// Responsive heights
+// Responsive heights (from global navbar config)
 const navbarHeight = computed(() => {
-  const heights = navbarConfig.value?.heights;
+  const heights = pagesStore.pages?.navbar?.heights;
   if (!heights) return '83px';
   if (isMobile.value) return heights.mobile || '83px';
   if (isTablet.value) return heights.tablet || '68px';

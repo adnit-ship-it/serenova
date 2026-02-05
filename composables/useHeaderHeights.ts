@@ -3,7 +3,6 @@ import { usePagesStore } from '~/stores/pagesStore'
 
 export function useHeaderHeights() {
   const pagesStore = usePagesStore()
-  const route = useRoute()
 
   // Breakpoint detection (mobile-first defaults for SSR)
   const isMobile = ref(true)
@@ -17,20 +16,9 @@ export function useHeaderHeights() {
     isTablet.value = width >= 768 && width < 1024
   }
 
-  // Get current page name from route
-  const getCurrentPageName = (): string => {
-    const path = route.path
-    if (path === '/') return 'home'
-    // Remove leading slash and get first segment
-    const segments = path.slice(1).split('/')
-    return segments[0] || 'home'
-  }
-
-  // Get navbar height from config for current page
+  // Get navbar height from global config
   const navbarHeight = computed(() => {
-    const pageName = getCurrentPageName()
-    const pageConfig = pagesStore.getPageConfig(pageName) || pagesStore.getPageConfig('home')
-    const heights = pageConfig?.navbar?.heights
+    const heights = pagesStore.pages?.navbar?.heights
 
     if (!heights) return '83px' // Default fallback
 

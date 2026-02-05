@@ -89,6 +89,14 @@ export interface AnnouncementConfig {
   }
 }
 
+export interface NavbarConfig {
+  heights: {
+    mobile: string
+    tablet?: string
+    desktop: string
+  }
+}
+
 export interface PagesData {
   iconRegistry?: any
   logoRegistry?: any
@@ -103,5 +111,6 @@ export interface PagesData {
   loadingScreen?: LoadingScreenConfig
   common?: CommonConfig
   announcement?: AnnouncementConfig
+  navbar?: NavbarConfig
   [key: string]: PageConfig | any
 }
