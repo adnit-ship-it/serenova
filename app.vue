@@ -12,8 +12,10 @@
 <script setup>
 import { ref, onMounted, computed } from 'vue'
 import { usePagesStore } from '~/stores/pagesStore'
+import { useLegalStore } from '~/stores/legalStore'
 
 const pagesStore = usePagesStore();
+const legalStore = useLegalStore();
 
 // Get page title from common
 const common = computed(() => pagesStore.pages?.common);
@@ -34,11 +36,22 @@ const isFadingOut = ref(false)
 const minLoadingTime = 500 // 0.5 seconds in milliseconds
 
 onMounted(async () => {
-  // Pages are now loaded in plugin (runs before render)
+  // Pages and legal data are loaded in parallel
   // Only load if not already loaded (fallback)
+  const loadPromises = []
+  
   if (!pagesStore.pages) {
-    await pagesStore.loadAll()
+    loadPromises.push(pagesStore.loadAll())
   }
+  
+  if (!legalStore.legalData) {
+    loadPromises.push(legalStore.loadLegal())
+  }
+  
+  if (loadPromises.length > 0) {
+    await Promise.all(loadPromises)
+  }
+  
   // Disable scrolling when loading screen is visible
   document.body.style.overflow = 'hidden'
 

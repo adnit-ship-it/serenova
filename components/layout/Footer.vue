@@ -1,10 +1,9 @@
 <template>
-  <footer
-    class="bg-[#E3D5D4] flex justify-center pb-4"
-    :style="{ height: footerHeight }"
-  >
+  <footer class="bg-[#E3D5D4] flex flex-col justify-center pb-4">
+    <!-- Main footer row -->
     <div
-      class="max-w-[1328px] w-full flex items-end justify-between md:justify-center px-4 md:px-8 md:gap-8"
+      class="max-w-[1328px] w-full mx-auto flex items-end justify-between md:justify-center px-4 md:px-8 md:gap-8"
+      :style="{ minHeight: footerHeight }"
     >
       <div class="flex items-center">
         <NuxtLink to="/">
@@ -41,18 +40,43 @@
         </NuxtLink>
       </div>
     </div>
-    <!-- Logo on the left -->
+
+    <!-- Legal links row -->
+    <div 
+      v-if="legalLinks.length > 0"
+      class="max-w-[1328px] w-full mx-auto flex justify-center px-4 md:px-8 mt-2"
+    >
+      <div class="flex items-center gap-x-2 md:gap-x-4">
+        <template v-for="(page, index) in legalLinks" :key="page.id">
+          <NuxtLink 
+            :to="`/legal/${page.slug}`" 
+            class="text-accentColor1 text-[10px] md:text-[12px] opacity-70 hover:opacity-100 transition-opacity duration-200"
+          >
+            {{ page.footerLabel }}
+          </NuxtLink>
+          <span 
+            v-if="index < legalLinks.length - 1" 
+            class="text-accentColor1 opacity-50 text-[10px] md:text-[12px]"
+          >|</span>
+        </template>
+      </div>
+    </div>
   </footer>
 </template>
 
 <script setup>
 import { computed, ref, onMounted, onUnmounted } from "vue";
 import { usePagesStore } from '~/stores/pagesStore';
+import { useLegalStore } from '~/stores/legalStore';
 import { getLogoSize } from '~/utils/branding';
 
 const pagesStore = usePagesStore();
+const legalStore = useLegalStore();
 const route = useRoute();
 const common = computed(() => pagesStore.pages?.common);
+
+// Legal links from legal store
+const legalLinks = computed(() => legalStore.footerLinks);
 
 // Get current page name from route
 const getCurrentPageName = () => {
