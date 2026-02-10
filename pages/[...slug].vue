@@ -56,12 +56,11 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { usePagesStore } from '~/stores/pagesStore'
-import { useCommonStore } from '~/stores/commonStore'
 import { useSectionSpacing } from '~/composables/useSectionSpacing'
 
 const route = useRoute()
 const pagesStore = usePagesStore()
-const commonStore = useCommonStore()
+const config = useAppConfig()
 const { getSectionStyle } = useSectionSpacing()
 
 // Resolve page key from route
@@ -92,13 +91,13 @@ const getSectionSpacingStyle = (section: any, index: number) => {
 // Set page metadata
 useHead({
   title: computed(() => pageConfig.value?.title 
-    ? `${pageConfig.value.title} | ${commonStore.strings?.pageTitle || 'Serenova'}`
-    : commonStore.strings?.pageTitle || 'Serenova'
+    ? `${pageConfig.value.title} | ${config.strings.pageTitle}`
+    : config.strings.pageTitle
   ),
   meta: [
     {
       name: 'description',
-      content: computed(() => pageConfig.value?.description || commonStore.strings?.pageDescription || '')
+      content: computed(() => pageConfig.value?.description || config.strings.pageDescription || '')
     }
   ]
 })

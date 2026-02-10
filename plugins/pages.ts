@@ -1,17 +1,14 @@
 export default defineNuxtPlugin(async () => {
   const pagesStore = usePagesStore()
-  const commonStore = useCommonStore()
-  const mediaStore = useMediaStore()
   const sectionsRegistryStore = useSectionsRegistryStore()
   const legalStore = useLegalStore()
   
-  // Load all data stores before render
+  // Load data stores before render
+  // Note: common and media config are now loaded via app.config.ts (no async loading needed)
   // This runs on both server and client
   try {
     await Promise.all([
       pagesStore.loadAll(),
-      commonStore.loadCommon(),
-      mediaStore.loadMedia(),
       sectionsRegistryStore.loadRegistry(),
       legalStore.loadLegal()
     ])

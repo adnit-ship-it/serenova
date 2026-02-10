@@ -1,8 +1,7 @@
 import { ref, computed, onMounted, onUnmounted } from 'vue'
-import { useCommonStore } from '~/stores/commonStore'
 
 export function useHeaderHeights() {
-  const commonStore = useCommonStore()
+  const config = useAppConfig()
 
   // Breakpoint detection (mobile-first defaults for SSR)
   const isMobile = ref(true)
@@ -18,26 +17,22 @@ export function useHeaderHeights() {
 
   // Get navbar height from global config
   const navbarHeight = computed(() => {
-    const heights = commonStore.navbar?.heights
+    const heights = config.navbar.heights
 
-    if (!heights) return '83px' // Default fallback
-
-    if (isMobile.value) return heights.mobile || '83px'
-    if (isTablet.value) return heights.tablet || '68px'
-    return heights.desktop || '68px'
+    if (isMobile.value) return heights.mobile
+    if (isTablet.value) return heights.tablet || heights.desktop
+    return heights.desktop
   })
 
   // Get announcement height (0px if disabled)
   const announcementHeight = computed(() => {
-    const announcement = commonStore.announcement
-    if (!announcement?.enabled) return '0px'
+    if (!config.announcement.enabled) return '0px'
 
-    const heights = announcement.heights
-    if (!heights) return '0px'
+    const heights = config.announcement.heights
 
-    if (isMobile.value) return heights.mobile || '60px'
-    if (isTablet.value) return heights.tablet || '70px'
-    return heights.desktop || '80px'
+    if (isMobile.value) return heights.mobile
+    if (isTablet.value) return heights.tablet || heights.desktop
+    return heights.desktop
   })
 
   // Combined header offset

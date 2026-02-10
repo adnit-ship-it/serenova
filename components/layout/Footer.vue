@@ -24,19 +24,19 @@
           to="/about"
           class="text-accentColor1 text-[14px] md:text-[18px] lg:text-[20px] transition-colors duration-200"
         >
-          {{ strings?.navigation?.about }}
+          {{ config.strings.navigation.about }}
         </NuxtLink>
         <NuxtLink
           to="/contact"
           class="text-accentColor1 text-[14px] md:text-[18px] lg:text-[20px] transition-colors duration-200"
         >
-          {{ strings?.navigation?.contactUs }}
+          {{ config.strings.navigation.contactUs }}
         </NuxtLink>
         <NuxtLink
           to="/products"
           class="text-accentColor1 text-[14px] md:text-[18px] lg:text-[20px] transition-colors duration-200"
         >
-          {{ strings?.navigation?.products }}
+          {{ config.strings.navigation.products }}
         </NuxtLink>
       </div>
     </div>
@@ -66,22 +66,18 @@
 
 <script setup>
 import { computed, ref, onMounted, onUnmounted } from "vue";
-import { useCommonStore } from '~/stores/commonStore';
 import { useLegalStore } from '~/stores/legalStore';
 import { getLogoSize } from '~/utils/branding';
 
-const commonStore = useCommonStore();
+const config = useAppConfig();
 const legalStore = useLegalStore();
-const strings = computed(() => commonStore.strings);
 
 // Legal links from legal store
 const legalLinks = computed(() => legalStore.footerLinks);
 
-// Get footer config from global common config
-const footerConfig = computed(() => commonStore.footer);
-const footerLogo = computed(() => footerConfig.value?.logo);
-const footerLogoSrc = computed(() => footerLogo.value?.src || "/assets/images/brand/logo-secondary-1.svg");
-const footerLogoAlt = computed(() => footerLogo.value?.alt || strings.value?.accessibility?.brandLogo || "Brand logo");
+// Get footer config from app config
+const footerLogoSrc = computed(() => config.footer.logo.src);
+const footerLogoAlt = computed(() => config.footer.logo.alt || config.strings.accessibility.brandLogo || "Brand logo");
 
 // Responsive breakpoint detection
 const isMobile = ref(false);
@@ -95,11 +91,10 @@ const checkBreakpoints = () => {
 
 // Responsive heights from global config
 const footerHeight = computed(() => {
-  const heights = footerConfig.value?.heights;
-  if (!heights) return '64px';
-  if (isMobile.value) return heights.mobile || '64px';
-  if (isTablet.value) return heights.tablet || '72px';
-  return heights.desktop || '72px';
+  const heights = config.footer.heights;
+  if (isMobile.value) return heights.mobile;
+  if (isTablet.value) return heights.tablet || heights.desktop;
+  return heights.desktop;
 });
 
 const logoHeight = computed(() => getLogoSize('footer', 'height', isMobile.value, isTablet.value));

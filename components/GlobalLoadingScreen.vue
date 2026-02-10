@@ -22,7 +22,6 @@
 
 <script setup lang="ts">
 import { computed, onMounted, onUnmounted, ref } from 'vue'
-import { useCommonStore } from '~/stores/commonStore'
 import { getLogoSize } from '~/utils/branding'
 
 interface Props {
@@ -32,13 +31,11 @@ interface Props {
 
 defineProps<Props>()
 
-const commonStore = useCommonStore()
+const config = useAppConfig()
 
-const loadingScreenConfig = computed(() => commonStore.loadingScreen)
-const loadingScreenLogo = computed(() => loadingScreenConfig.value?.logo)
-const loadingLogoSrc = computed(() => loadingScreenLogo.value?.src || '/assets/images/brand/logo-secondary-1.svg')
-const loadingLogoAlt = computed(() => loadingScreenLogo.value?.alt || commonStore.strings?.accessibility?.brandLogo || 'Brand logo')
-const loadingText = computed(() => loadingScreenConfig.value?.text || 'Loading...')
+const loadingLogoSrc = computed(() => config.loadingScreen.logo.src)
+const loadingLogoAlt = computed(() => config.loadingScreen.logo.alt || config.strings.accessibility.brandLogo || 'Brand logo')
+const loadingText = computed(() => config.loadingScreen.text)
 
 const isMobile = ref(false)
 const updateIsMobile = () => {

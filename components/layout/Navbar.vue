@@ -22,8 +22,8 @@
       ]"
       :style="{ height: navbarHeight }">
       <!-- Mobile hamburger menu on the left -->
-      <button v-if="!props.hideNavigation" class="md:hidden rounded" :aria-label="strings?.accessibility?.toggleMenu" @click="toggleMobileMenu">
-        <img :src="strings?.media?.hamburgerMenu?.src" :alt="strings?.accessibility?.menu" class="h-4 w-4" />
+      <button v-if="!props.hideNavigation" class="md:hidden rounded" :aria-label="config.strings.accessibility.toggleMenu" @click="toggleMobileMenu">
+        <img :src="config.strings.media.hamburgerMenu.src" :alt="config.strings.accessibility.menu" class="h-4 w-4" />
       </button>
 
       <!-- Logo on center-->
@@ -51,12 +51,12 @@
         <div v-if="!props.hideNavigation" class="flex flex-row items-center md:gap-3 relative">
           <NuxtLink to="/consultation" class="hidden md:block">
             <UiButton background-color="white" text-color="accentColor1" width="176px" height="32px" font-size="20">
-              {{ strings?.buttons?.getStarted }}
+              {{ config.strings.buttons.getStarted }}
             </UiButton>
           </NuxtLink>
           <NuxtLink to="/consultation" class="block md:hidden">
             <UiButton background-color="white" text-color="accentColor1" width="144px" height="28px" font-size="18">
-              {{ strings?.buttons?.getStarted }}
+              {{ config.strings.buttons.getStarted }}
             </UiButton>
           </NuxtLink>
 
@@ -85,12 +85,10 @@
 <script setup>
 import { ref, onMounted, onUnmounted, computed } from "vue";
 import { usePagesStore } from '~/stores/pagesStore'
-import { useCommonStore } from '~/stores/commonStore'
 import { getLogoSize } from '~/utils/branding'
 
 const pagesStore = usePagesStore();
-const commonStore = useCommonStore();
-const strings = computed(() => commonStore.strings);
+const config = useAppConfig();
 const navigationPages = computed(() => pagesStore.navigationPages);
 
 // Define the color prop with a default value of 'bg-white'
@@ -106,9 +104,8 @@ const props = defineProps({
 });
 
 // Get navbar logo from global config
-const navbarLogo = computed(() => commonStore.navbar?.logo);
-const navbarLogoSrc = computed(() => navbarLogo.value?.src || "/assets/images/brand/logo-primary-1.svg");
-const navbarLogoAlt = computed(() => navbarLogo.value?.alt || strings.value?.accessibility?.brandLogo || "Brand logo");
+const navbarLogoSrc = computed(() => config.navbar.logo.src);
+const navbarLogoAlt = computed(() => config.navbar.logo.alt || config.strings.accessibility.brandLogo || "Brand logo");
 
 // Responsive breakpoint detection
 const isMobile = ref(false);
@@ -122,11 +119,10 @@ const checkBreakpoints = () => {
 
 // Responsive heights (from global navbar config)
 const navbarHeight = computed(() => {
-  const heights = commonStore.navbar?.heights;
-  if (!heights) return '83px';
-  if (isMobile.value) return heights.mobile || '83px';
-  if (isTablet.value) return heights.tablet || '68px';
-  return heights.desktop || '68px';
+  const heights = config.navbar.heights;
+  if (isMobile.value) return heights.mobile;
+  if (isTablet.value) return heights.tablet || heights.desktop;
+  return heights.desktop;
 });
 
 const logoHeight = computed(() => getLogoSize('navbar', 'height', isMobile.value, isTablet.value));

@@ -1,9 +1,8 @@
 import { ref, computed, onMounted, onUnmounted } from 'vue'
-import { useCommonStore } from '~/stores/commonStore'
 import type { PageSectionReference } from '~/types/pages'
 
 export function useSectionSpacing() {
-  const commonStore = useCommonStore()
+  const config = useAppConfig()
 
   // Breakpoint detection (mobile-first defaults for SSR)
   const isMobile = ref(true)
@@ -19,12 +18,11 @@ export function useSectionSpacing() {
 
   // Get default gap based on current breakpoint
   const getDefaultGap = computed(() => {
-    const spacing = commonStore.sectionSpacing?.default
-    if (!spacing) return '64px'
+    const spacing = config.sectionSpacing.default
     
-    if (isMobile.value) return spacing.mobile || '48px'
-    if (isTablet.value) return spacing.tablet || '56px'
-    return spacing.desktop || '64px'
+    if (isMobile.value) return spacing.mobile
+    if (isTablet.value) return spacing.tablet || spacing.desktop
+    return spacing.desktop
   })
 
   // Get gap for a specific section (with override support)
