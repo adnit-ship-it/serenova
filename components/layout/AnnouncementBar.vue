@@ -26,11 +26,11 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import { usePagesStore } from '~/stores/pagesStore'
+import { useCommonStore } from '~/stores/commonStore'
 
-const pagesStore = usePagesStore()
+const commonStore = useCommonStore()
 
-const announcement = computed(() => pagesStore.announcement)
+const announcement = computed(() => commonStore.announcement)
 
 const barStyles = computed(() => ({
   height: 'var(--announcement-height)',

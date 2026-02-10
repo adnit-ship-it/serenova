@@ -1,0 +1,152 @@
+{
+    "logoSizes": {
+        "navbar": {
+            "height": {
+                "mobile": "24px",
+                "tablet": "28px",
+                "desktop": "28px"
+            },
+            "width": {
+                "mobile": "auto",
+                "tablet": "auto",
+                "desktop": "auto"
+            }
+        },
+        "footer": {
+            "height": {
+                "mobile": "20px",
+                "tablet": "26px",
+                "desktop": "32px"
+            },
+            "width": {
+                "mobile": "auto",
+                "tablet": "auto",
+                "desktop": "auto"
+            }
+        },
+        "loadingScreen": {
+            "height": {
+                "mobile": "20px",
+                "desktop": "132px"
+            },
+            "width": {
+                "mobile": "auto",
+                "desktop": "auto"
+            }
+        },
+        "hero": {
+            "height": {
+                "mobile": "34px",
+                "tablet": "38px",
+                "desktop": "62px"
+            },
+            "width": {
+                "mobile": "192px",
+                "tablet": "280px",
+                "desktop": "365px"
+            }
+        },
+        "contact": {
+            "height": {
+                "mobile": "56px",
+                "tablet": "72px",
+                "desktop": "88px"
+            },
+            "width": {
+                "mobile": "auto",
+                "tablet": "auto",
+                "desktop": "auto"
+            }
+        },
+        "products": {
+            "height": {
+                "mobile": "48px",
+                "tablet": "64px",
+                "desktop": "100px"
+            },
+            "width": {
+                "mobile": "auto",
+                "tablet": "auto",
+                "desktop": "auto"
+            }
+        }
+    },
+    "navbar": {
+        "heights": {
+            "mobile": "83px",
+            "tablet": "68px",
+            "desktop": "68px"
+        },
+        "logo": {
+            "src": "/assets/images/brand/logo-primary-1.svg",
+            "alt": "Serenova primary logo"
+        }
+    },
+    "footer": {
+        "heights": {
+            "mobile": "64px",
+            "tablet": "72px",
+            "desktop": "72px"
+        },
+        "logo": {
+            "src": "/assets/images/brand/logo-primary-1.svg",
+            "alt": "Serenova secondary logo"
+        }
+    },
+    "announcement": {
+        "enabled": true,
+        "text": "Limited time offer: 20% off your first consultation!",
+        "link": "/consultation",
+        "backgroundColor": "#750021",
+        "textColor": "#ffffff",
+        "heights": {
+            "mobile": "60px",
+            "tablet": "70px",
+            "desktop": "80px"
+        }
+    },
+    "loadingScreen": {
+        "logo": {
+            "src": "/assets/images/brand/logo-secondary-1.svg",
+            "alt": "Serenova loading logo"
+        },
+        "text": "Loading..."
+    },
+    "sectionSpacing": {
+        "default": {
+            "mobile": "48px",
+            "tablet": "56px",
+            "desktop": "24px"
+        }
+    },
+    "protectedPages": ["home", "about", "contact", "products"],
+    "strings": {
+        "pageTitle": "Serenova",
+        "pageDescription": "Serenova is a company that provides a service to help people lose weight.",
+        "buttons": {
+            "next": "Next",
+            "submitToProvider": "Submit to Provider",
+            "back": "Back",
+            "getStarted": "Get Started"
+        },
+        "navigation": {
+            "home": "Home",
+            "about": "About",
+            "products": "Products",
+            "contact": "Contact",
+            "contactUs": "Contact Us",
+            "product": "Product"
+        },
+        "accessibility": {
+            "toggleMenu": "Toggle mobile menu",
+            "brandLogo": "Brand Logo",
+            "menu": "Menu"
+        },
+        "media": {
+            "hamburgerMenu": {
+                "src": "/assets/images/hamburger-menu.svg",
+                "alt": "Open navigation menu icon"
+            }
+        }
+    }
+}

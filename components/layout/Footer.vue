@@ -24,19 +24,19 @@
           to="/about"
           class="text-accentColor1 text-[14px] md:text-[18px] lg:text-[20px] transition-colors duration-200"
         >
-          {{ common?.navigation?.about }}
+          {{ strings?.navigation?.about }}
         </NuxtLink>
         <NuxtLink
           to="/contact"
           class="text-accentColor1 text-[14px] md:text-[18px] lg:text-[20px] transition-colors duration-200"
         >
-          {{ common?.navigation?.contactUs }}
+          {{ strings?.navigation?.contactUs }}
         </NuxtLink>
         <NuxtLink
           to="/products"
           class="text-accentColor1 text-[14px] md:text-[18px] lg:text-[20px] transition-colors duration-200"
         >
-          {{ common?.navigation?.products }}
+          {{ strings?.navigation?.products }}
         </NuxtLink>
       </div>
     </div>
@@ -66,38 +66,22 @@
 
 <script setup>
 import { computed, ref, onMounted, onUnmounted } from "vue";
-import { usePagesStore } from '~/stores/pagesStore';
+import { useCommonStore } from '~/stores/commonStore';
 import { useLegalStore } from '~/stores/legalStore';
 import { getLogoSize } from '~/utils/branding';
 
-const pagesStore = usePagesStore();
+const commonStore = useCommonStore();
 const legalStore = useLegalStore();
-const route = useRoute();
-const common = computed(() => pagesStore.pages?.common);
+const strings = computed(() => commonStore.strings);
 
 // Legal links from legal store
 const legalLinks = computed(() => legalStore.footerLinks);
 
-// Get current page name from route
-const getCurrentPageName = () => {
-  const path = route.path;
-  if (path === '/') return 'home';
-  if (path.startsWith('/about')) return 'about';
-  if (path.startsWith('/products')) return 'products';
-  if (path.startsWith('/contact')) return 'contact';
-  return 'home'; // Default to home if page not found
-};
-
-// Get page-specific config from pages.json
-const getPageConfig = computed(() => {
-  const pageName = getCurrentPageName();
-  return pagesStore.getPageConfig(pageName) || pagesStore.getPageConfig('home');
-});
-
-const footerConfig = computed(() => getPageConfig.value?.footer);
+// Get footer config from global common config
+const footerConfig = computed(() => commonStore.footer);
 const footerLogo = computed(() => footerConfig.value?.logo);
 const footerLogoSrc = computed(() => footerLogo.value?.src || "/assets/images/brand/logo-secondary-1.svg");
-const footerLogoAlt = computed(() => footerLogo.value?.alt || common.value?.accessibility?.brandLogo || "Brand logo");
+const footerLogoAlt = computed(() => footerLogo.value?.alt || strings.value?.accessibility?.brandLogo || "Brand logo");
 
 // Responsive breakpoint detection
 const isMobile = ref(false);
@@ -109,7 +93,7 @@ const checkBreakpoints = () => {
   isTablet.value = width >= 768 && width < 1024;
 };
 
-// Responsive heights
+// Responsive heights from global config
 const footerHeight = computed(() => {
   const heights = footerConfig.value?.heights;
   if (!heights) return '64px';

@@ -27,7 +27,7 @@
             delay: 25,
           },
         }" class="text-[32px] md:text-[48px] font-semibold mt-2 md:mt-4 lg:mt-8">
-          {{ page?.title || 'Explore Our Products' }}
+          {{ pageConfig?.pageTitle || 'Explore Our Products' }}
         </h1>
         <p v-motion :initial="{ opacity: 0, y: 100 }" :visible-once="{
           opacity: 1,
@@ -41,7 +41,7 @@
             delay: 50,
           },
         }" class="text-[16px] md:text-[23px] font-extralight mt-2">
-          {{ page?.subtitle || 'Personalized GLP-1 Medication' }}
+          {{ pageConfig?.subtitle || 'Personalized GLP-1 Medication' }}
         </p>
         <div class="h-4 md:h-8"></div>
         <div class="flex gap-4 flex-wrap">
@@ -95,39 +95,24 @@
       />
     </template>
   </UiSectionWrapper>
-
 </template>
 
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted, computed } from "vue";
 import { useCRMStore } from '~/stores/crmStore';
 import { usePagesStore } from '~/stores/pagesStore';
-import { useRoute } from 'vue-router';
 import { products as staticProducts, categoryLabels } from '~/data/intake-form/products';
 import type { ProductCategory } from '~/types/intake-form/checkout';
 import { getLogoSize } from '~/utils/branding';
+import type { PageConfig, PageSectionReference } from '~/types/pages';
+
+const props = defineProps<{
+  pageConfig: PageConfig
+  pageSections: PageSectionReference[]
+}>();
 
 const crmStore = useCRMStore();
 const pagesStore = usePagesStore();
-const route = useRoute();
-
-// Get products page config from pages.json
-const getCurrentPageName = () => {
-  const path = route.path;
-  if (path.startsWith('/products')) return 'products';
-  return 'home';
-};
-
-const pageConfig = computed(() => {
-  const pageName = getCurrentPageName();
-  return pagesStore.getPageConfig(pageName);
-});
-
-const page = computed(() => ({
-  title: pageConfig.value?.pageTitle || 'Explore Our Products',
-  subtitle: pageConfig.value?.subtitle || 'Personalized GLP-1 Medication',
-  categoryButton: pageConfig.value?.categoryButton || 'Weight Loss'
-}));
 
 // Mobile detection
 const isMobile = ref(false);
@@ -240,19 +225,8 @@ const filteredProducts = computed(() => {
   return staticProducts.filter(product => product.category === selectedCategory.value);
 });
 
-// Get current page key from route
-const pageKey = computed(() => {
-  if (route.path === '/') return 'home'
-  return route.path.slice(1) // Remove leading '/'
-})
-
-// Get ordered sections for this page
-const pageSections = computed(() => {
-  return pagesStore.getPageSections(pageKey.value)
-})
-
 // Get additional props for specific sections (e.g., filteredProducts for SectionsProducts)
-const getAdditionalPropsForSection = (section: any) => {
+const getAdditionalPropsForSection = (section: PageSectionReference) => {
   if (section.component === 'SectionsProducts') {
     return {
       filteredProducts: filteredProducts.value
@@ -260,10 +234,6 @@ const getAdditionalPropsForSection = (section: any) => {
   }
   return {}
 }
-
-definePageMeta({
-  layout: "products",
-});
 </script>
 
 <style scoped>

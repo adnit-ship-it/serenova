@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
-import type { PagesData, PageConfig, PageSectionReference, AnnouncementConfig } from '~/types/pages'
+import type { PagesData, PageConfig, PageSectionReference } from '~/types/pages'
 
 // Section data structure from sections.json
 export interface SectionData {
@@ -25,7 +25,7 @@ export const usePagesStore = defineStore('pages', () => {
     
     try {
       const data = await import('~/data/pages.json')
-      pages.value = data.default
+      pages.value = data.default as PagesData
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Failed to load pages'
       if (!skipLoadingState) {
@@ -85,6 +85,15 @@ export const usePagesStore = defineStore('pages', () => {
     }
   }
 
+  // Get all pages as an array with their keys
+  const allPages = computed(() => {
+    if (!pages.value) return []
+    return Object.entries(pages.value).map(([key, config]) => ({
+      key,
+      ...config
+    }))
+  })
+
   // Get pages for navigation (exclude home, filter by show, sort by order)
   const navigationPages = computed(() => {
     if (!pages.value) return []
@@ -130,15 +139,10 @@ export const usePagesStore = defineStore('pages', () => {
     return sections.value.find(section => section.name === sectionName) || null
   }
 
-  // Announcement configuration
-  const announcement = computed((): AnnouncementConfig | null => {
-    return pages.value?.announcement || null
-  })
-
-  // Check if announcement is enabled
-  const isAnnouncementEnabled = computed((): boolean => {
-    return pages.value?.announcement?.enabled === true
-  })
+  // Check if a page exists
+  const pageExists = (pageKey: string): boolean => {
+    return pages.value?.[pageKey] !== undefined
+  }
 
   return {
     pages,
@@ -148,13 +152,13 @@ export const usePagesStore = defineStore('pages', () => {
     loadPages,
     loadSections,
     loadAll,
+    allPages,
     navigationPages,
     getPageRoute,
     getPageTitle,
     getPageConfig,
     getPageSections,
     getSectionData,
-    announcement,
-    isAnnouncementEnabled
+    pageExists
   }
 })

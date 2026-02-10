@@ -1,6 +1,6 @@
 import { computed } from 'vue'
 import { useBrandingStore } from '~/stores/branding'
-import { usePagesStore } from '~/stores/pagesStore'
+import { useCommonStore } from '~/stores/commonStore'
 
 /**
  * Utility function to get dynamic brand colors from the API
@@ -51,7 +51,7 @@ export function useBrandLogos() {
 }
 
 /**
- * Utility function to get logo sizes from pages.json
+ * Utility function to get logo sizes from common.json
  * @param context - The logo context: 'navbar', 'footer', 'loadingScreen', 'hero', 'contact', 'products'
  * @param dimension - 'height' or 'width'
  * @param isMobile - Whether the current viewport is mobile (optional, will be detected if not provided)
@@ -64,8 +64,8 @@ export function getLogoSize(
   isMobile?: boolean,
   isTablet?: boolean
 ): string {
-  const pagesStore = usePagesStore()
-  const logoSizes = pagesStore.pages?.logoSizes
+  const commonStore = useCommonStore()
+  const logoSizes = commonStore.logoSizes
   
   if (!logoSizes || !logoSizes[context]) {
     // Fallback values

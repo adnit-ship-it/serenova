@@ -6,19 +6,23 @@
       Props: {{ JSON.stringify(sectionProps, null, 2) }}
     </div>
   </div>
-  <component 
+  <div 
     v-else-if="resolvedComponent"
-    :is="resolvedComponent"
-    v-bind="sectionProps"
-    :class="backgroundClass"
-    @error="handleComponentError"
-  />
+    :style="sectionSpacingStyle"
+  >
+    <component 
+      :is="resolvedComponent"
+      v-bind="sectionProps"
+      :class="backgroundClass"
+      @error="handleComponentError"
+    />
+  </div>
   <!-- Skip rendering if component is null -->
   <div v-else-if="componentName === null || componentName === 'null'" class="hidden">
     <!-- Section skipped: {{ section?.name }} -->
   </div>
   <div v-else-if="isDev" class="text-yellow-500 p-4 text-sm border border-yellow-300 rounded">
-    ⚠️ Section "{{ section?.name }}" has no component defined (component: {{ componentName }})
+    Section "{{ section?.name }}" has no component defined (component: {{ componentName }})
   </div>
   <div v-else class="hidden">
     <!-- Production: silently skip missing components -->
@@ -34,6 +38,21 @@ import { usePagesStore } from '~/stores/pagesStore'
 
 const isDev = import.meta.dev
 const pagesStore = usePagesStore()
+
+// Section spacing style based on gapAfter/gapBefore props
+const sectionSpacingStyle = computed(() => {
+  const style = {}
+  
+  // Apply gapAfter as margin-bottom if specified
+  if (props.section?.gapAfter) {
+    style.marginBottom = props.section.gapAfter
+  }
+  
+  // Note: gapBefore is typically handled at the page level, not in DynamicSection
+  // since sections don't know their position in the page
+  
+  return style
+})
 
 const props = defineProps({
   section: {

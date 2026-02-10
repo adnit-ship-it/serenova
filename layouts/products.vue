@@ -11,11 +11,11 @@
 
 <script setup>
 import { useHeaderHeights } from '~/composables/useHeaderHeights'
-import { usePagesStore } from '~/stores/pagesStore'
+import { useCommonStore } from '~/stores/commonStore'
 
 // Products layout components are auto-imported in Nuxt 3
-const pagesStore = usePagesStore()
+const commonStore = useCommonStore()
 const { cssVariables } = useHeaderHeights()
 
-const isAnnouncementEnabled = computed(() => pagesStore.isAnnouncementEnabled)
+const isAnnouncementEnabled = computed(() => commonStore.isAnnouncementEnabled)
 </script>

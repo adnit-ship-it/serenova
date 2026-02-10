@@ -11,16 +11,16 @@
 
 <script setup>
 import { useHeaderHeights } from '~/composables/useHeaderHeights'
-import { usePagesStore } from '~/stores/pagesStore'
+import { useCommonStore } from '~/stores/commonStore'
 
 // Layout components are auto-imported in Nuxt 3
 const route = useRoute()
-const pagesStore = usePagesStore()
+const commonStore = useCommonStore()
 const { cssVariables } = useHeaderHeights()
 
 const isCheckoutOrConsultationPage = computed(() => {
   return route.path === "/checkout" || route.path === "/consultation" || route.path === "/welcome"
 })
 
-const isAnnouncementEnabled = computed(() => pagesStore.isAnnouncementEnabled)
+const isAnnouncementEnabled = computed(() => commonStore.isAnnouncementEnabled)
 </script>

@@ -1,0 +1,82 @@
+{
+    "sections": [
+        {
+            "id": "hero",
+            "name": "Hero Section",
+            "component": "SectionsHero",
+            "description": "Main hero banner with headline and CTA"
+        },
+        {
+            "id": "discover",
+            "name": "Discover",
+            "component": "SectionsDiscover",
+            "description": "Feature discovery section"
+        },
+        {
+            "id": "trusted-by",
+            "name": "Trusted By",
+            "component": "SectionsTrustedBy",
+            "description": "Logo carousel of trusted brands"
+        },
+        {
+            "id": "journey",
+            "name": "Journey",
+            "component": "SectionsJourney",
+            "description": "Step-by-step journey cards"
+        },
+        {
+            "id": "cta",
+            "name": "Call to Action",
+            "component": "SectionsCTA",
+            "description": "CTA section with graph"
+        },
+        {
+            "id": "before-after",
+            "name": "Before & After",
+            "component": "SectionsBeforeAfter",
+            "description": "Before/after comparison"
+        },
+        {
+            "id": "products",
+            "name": "Products",
+            "component": "SectionsProducts",
+            "description": "Product grid display"
+        },
+        {
+            "id": "faq",
+            "name": "FAQ",
+            "component": "SectionsFAQ",
+            "description": "FAQ accordion"
+        },
+        {
+            "id": "intake-form",
+            "name": "Intake Form",
+            "component": "SectionsIntakeForm",
+            "description": "Lead capture form"
+        },
+        {
+            "id": "about-banner",
+            "name": "About Banner",
+            "component": "SectionsAboutBanner",
+            "description": "About page hero"
+        },
+        {
+            "id": "about-priority",
+            "name": "About Priority",
+            "component": "SectionsAboutPriority",
+            "description": "Priority/stats section"
+        },
+        {
+            "id": "statistics",
+            "name": "Statistics",
+            "component": "SectionsStatistics",
+            "description": "Statistics display"
+        },
+        {
+            "id": "reviews",
+            "name": "Reviews",
+            "component": "SectionsReviews",
+            "description": "Testimonial carousel"
+        }
+    ]
+}

@@ -4,6 +4,8 @@ export interface PageSectionReference {
   props: Record<string, any>
   show: boolean
   order: number
+  gapBefore?: string
+  gapAfter?: string
 }
 
 export interface PageConfig {
@@ -21,96 +23,19 @@ export interface PageConfig {
     alt: string
   }
   form?: any
-  navbar?: any
-  footer?: any
-}
-
-export interface LogoSizeConfig {
-  height: {
-    mobile: string
-    tablet?: string
-    desktop: string
-  }
-  width: {
-    mobile: string
-    tablet?: string
-    desktop: string
-  }
-}
-
-export interface LoadingScreenConfig {
-  logo: {
-    src: string
-    alt: string
-  }
-  text: string
-}
-
-export interface CommonConfig {
-  pageTitle: string
-  pageDescription?: string
-  buttons: {
-    next: string
-    submitToProvider: string
-    back: string
-    getStarted: string
-  }
-  navigation: {
-    home: string
-    about: string
-    products: string
-    contact: string
-    contactUs: string
-    product: string
-  }
-  accessibility: {
-    toggleMenu: string
-    brandLogo: string
-    menu: string
-  }
-  media: {
-    hamburgerMenu: {
-      src: string
-      alt: string
-    }
-  }
-}
-
-export interface AnnouncementConfig {
-  enabled: boolean
-  text: string
-  link?: string
-  backgroundColor: string
-  textColor: string
-  heights: {
-    mobile: string
-    tablet?: string
-    desktop: string
-  }
-}
-
-export interface NavbarConfig {
-  heights: {
-    mobile: string
-    tablet?: string
-    desktop: string
-  }
 }
 
 export interface PagesData {
-  iconRegistry?: any
-  logoRegistry?: any
-  logoSizes?: {
-    navbar?: LogoSizeConfig
-    footer?: LogoSizeConfig
-    loadingScreen?: Omit<LogoSizeConfig, 'height'> & { height: { mobile: string; desktop: string } }
-    hero?: LogoSizeConfig
-    contact?: LogoSizeConfig
-    products?: LogoSizeConfig
-  }
-  loadingScreen?: LoadingScreenConfig
-  common?: CommonConfig
-  announcement?: AnnouncementConfig
-  navbar?: NavbarConfig
-  [key: string]: PageConfig | any
+  [pageKey: string]: PageConfig
+}
+
+export interface SectionRegistryEntry {
+  id: string
+  name: string
+  component: string
+  description: string
+}
+
+export interface SectionRegistryData {
+  sections: SectionRegistryEntry[]
 }

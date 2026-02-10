@@ -1,8 +1,8 @@
 import { ref, computed, onMounted, onUnmounted } from 'vue'
-import { usePagesStore } from '~/stores/pagesStore'
+import { useCommonStore } from '~/stores/commonStore'
 
 export function useHeaderHeights() {
-  const pagesStore = usePagesStore()
+  const commonStore = useCommonStore()
 
   // Breakpoint detection (mobile-first defaults for SSR)
   const isMobile = ref(true)
@@ -18,7 +18,7 @@ export function useHeaderHeights() {
 
   // Get navbar height from global config
   const navbarHeight = computed(() => {
-    const heights = pagesStore.pages?.navbar?.heights
+    const heights = commonStore.navbar?.heights
 
     if (!heights) return '83px' // Default fallback
 
@@ -29,7 +29,7 @@ export function useHeaderHeights() {
 
   // Get announcement height (0px if disabled)
   const announcementHeight = computed(() => {
-    const announcement = pagesStore.announcement
+    const announcement = commonStore.announcement
     if (!announcement?.enabled) return '0px'
 
     const heights = announcement.heights
