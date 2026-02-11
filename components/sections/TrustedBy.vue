@@ -4,19 +4,7 @@
       <h2 
         v-if="heading?.show !== false"
         v-motion 
-        :initial="{ opacity: 0, y: 32 }" 
-        :visible-once="{
-          opacity: 1,
-          y: 0,
-          transition: {
-            duration: 400,
-            type: 'ease-in',
-            stiffness: 250,
-            damping: 25,
-            mass: 1,
-            delay: 100,
-          },
-        }" 
+        v-bind="fadeUpSubtle(100)" 
         :class="[
           'pb-[24px] text-[20px] md:text-[28px] lg:text-[32px] font-semibold text-center',
           headingColorClass
@@ -51,6 +39,9 @@
 <script setup>
 import { computed } from 'vue'
 import { resolveColorToken } from '~/utils/colorTokens'
+import { useMotionPresets } from '~/composables/useMotionPresets'
+
+const { fadeUpSubtle } = useMotionPresets()
 
 // Define props
 const props = defineProps({

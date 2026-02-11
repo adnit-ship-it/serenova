@@ -27,42 +27,8 @@
         "loadingScreen": {
             "height": {
                 "mobile": "20px",
+                "tablet": "80px",
                 "desktop": "132px"
-            },
-            "width": {
-                "mobile": "auto",
-                "desktop": "auto"
-            }
-        },
-        "hero": {
-            "height": {
-                "mobile": "34px",
-                "tablet": "38px",
-                "desktop": "62px"
-            },
-            "width": {
-                "mobile": "192px",
-                "tablet": "280px",
-                "desktop": "365px"
-            }
-        },
-        "contact": {
-            "height": {
-                "mobile": "56px",
-                "tablet": "72px",
-                "desktop": "88px"
-            },
-            "width": {
-                "mobile": "auto",
-                "tablet": "auto",
-                "desktop": "auto"
-            }
-        },
-        "products": {
-            "height": {
-                "mobile": "48px",
-                "tablet": "64px",
-                "desktop": "100px"
             },
             "width": {
                 "mobile": "auto",

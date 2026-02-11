@@ -1,46 +1,14 @@
 <template>
-  <UiSectionWrapper class="pt-12 md:pt-16 pb-24 md:pb-32 flex-col bg-backgroundColor">
+  <UiSectionWrapper class="products-page pt-12 md:pt-16 pb-24 md:pb-32 flex-col bg-backgroundColor" :style="responsiveCSSVars">
     <!-- Render all sections in order from pages.json -->
     <template v-for="section in pageSections" :key="section.name">
       <!-- Products Hero: Render inline content when component is null -->
       <UiSectionContainer v-if="section.name === 'Products Hero' && section.component === null" class="mb-20">
-        <img v-motion :initial="{ opacity: 0, y: 100 }" :visible-once="{
-          opacity: 1,
-          y: 0,
-          transition: {
-            duration: 400,
-            type: 'ease-in',
-            stiffness: 250,
-            damping: 25,
-            mass: 1,
-          },
-        }" src="/assets/images/brand/logo-secondary-1.svg" alt="brand logo" class="object-cover" :style="{ height: productsLogoHeight, width: productsLogoWidth }" />
-        <h1 v-motion :initial="{ opacity: 0, y: 100 }" :visible-once="{
-          opacity: 1,
-          y: 0,
-          transition: {
-            duration: 400,
-            type: 'ease-in',
-            stiffness: 250,
-            damping: 25,
-            mass: 1,
-            delay: 25,
-          },
-        }" class="text-[32px] md:text-[48px] font-semibold mt-2 md:mt-4 lg:mt-8">
+        <img v-motion v-bind="fadeUp()" :src="productsLogo?.src || '/assets/images/brand/logo-secondary-1.svg'" :alt="productsLogo?.alt || 'brand logo'" class="products-logo object-cover" />
+        <h1 v-motion v-bind="fadeUp(25)" class="text-[32px] md:text-[48px] font-semibold mt-2 md:mt-4 lg:mt-8">
           {{ pageConfig?.pageTitle || 'Explore Our Products' }}
         </h1>
-        <p v-motion :initial="{ opacity: 0, y: 100 }" :visible-once="{
-          opacity: 1,
-          y: 0,
-          transition: {
-            duration: 400,
-            type: 'ease-in',
-            stiffness: 250,
-            damping: 25,
-            mass: 1,
-            delay: 50,
-          },
-        }" class="text-[16px] md:text-[23px] font-extralight mt-2">
+        <p v-motion v-bind="fadeUp(50)" class="text-[16px] md:text-[23px] font-extralight mt-2">
           {{ pageConfig?.subtitle || 'Personalized GLP-1 Medication' }}
         </p>
         <div class="h-4 md:h-8"></div>
@@ -49,18 +17,7 @@
           <UiButton 
             @click="selectedCategory = 'all'"
             :ghost="selectedCategory !== 'all'"
-            v-motion :initial="{ opacity: 0, y: 100 }" :visible-once="{
-              opacity: 1,
-              y: 0,
-              transition: {
-                duration: 400,
-                type: 'ease-in',
-                stiffness: 250,
-                damping: 25,
-                mass: 1,
-                delay: 75,
-              },
-            }" :width="buttonWidth" :height="buttonHeight" :font-size="buttonFontSize" background-color="accentColor2">
+            v-motion v-bind="fadeUp(75)" :width="buttonWidth" :height="buttonHeight" :font-size="buttonFontSize" background-color="accentColor2">
             All
           </UiButton>
           
@@ -70,18 +27,7 @@
             :key="category"
             @click="selectedCategory = category"
             :ghost="selectedCategory !== category"
-            v-motion :initial="{ opacity: 0, y: 100 }" :visible-once="{
-              opacity: 1,
-              y: 0,
-              transition: {
-                duration: 400,
-                type: 'ease-in',
-                stiffness: 250,
-                damping: 25,
-                mass: 1,
-                delay: 75,
-              },
-            }" :width="buttonWidth" :height="buttonHeight" :font-size="buttonFontSize" background-color="accentColor2">
+            v-motion v-bind="fadeUp(75)" :width="buttonWidth" :height="buttonHeight" :font-size="buttonFontSize" background-color="accentColor2">
             {{ categoryLabels[category] }}
           </UiButton>
         </div>
@@ -98,13 +44,14 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted, computed } from "vue";
+import { ref, computed } from "vue";
 import { useCRMStore } from '~/stores/crmStore';
 import { usePagesStore } from '~/stores/pagesStore';
 import { products as staticProducts, categoryLabels } from '~/data/intake-form/products';
 import type { ProductCategory } from '~/types/intake-form/checkout';
-import { getLogoSize } from '~/utils/branding';
 import type { PageConfig, PageSectionReference } from '~/types/pages';
+import { useBreakpoints } from '~/composables/useBreakpoints';
+import { useMotionPresets } from '~/composables/useMotionPresets';
 
 const props = defineProps<{
   pageConfig: PageConfig
@@ -114,28 +61,28 @@ const props = defineProps<{
 const crmStore = useCRMStore();
 const pagesStore = usePagesStore();
 
-// Mobile detection
-const isMobile = ref(false);
-const isTablet = ref(false);
+// Use shared composables
+const { isMobile } = useBreakpoints();
+const { fadeUp } = useMotionPresets();
 
-// Check mobile on mount and resize
-const checkMobile = () => {
-  const width = window.innerWidth;
-  isMobile.value = width < 768;
-  isTablet.value = width >= 768 && width < 1024;
-};
+// Get Products Hero section data from sections.json
+const productsHeroData = computed(() => {
+  const heroSection = props.pageSections.find(s => s.name === 'Products Hero')
+  if (heroSection) {
+    return pagesStore.getSectionData(heroSection.name)
+  }
+  return null
+})
 
-const productsLogoHeight = computed(() => getLogoSize('products', 'height', isMobile.value, isTablet.value));
-const productsLogoWidth = computed(() => getLogoSize('products', 'width', isMobile.value, isTablet.value));
+// Get logo from section data
+const productsLogo = computed(() => productsHeroData.value?.logo)
 
-onMounted(() => {
-  checkMobile();
-  window.addEventListener("resize", checkMobile);
-});
-
-onUnmounted(() => {
-  window.removeEventListener("resize", checkMobile);
-});
+// CSS variables for responsive logo sizes
+const responsiveCSSVars = computed(() => ({
+  '--products-logo-height': productsLogo.value?.sizes?.mobile || '34px',
+  '--products-logo-height-tablet': productsLogo.value?.sizes?.tablet || productsLogo.value?.sizes?.desktop || '38px',
+  '--products-logo-height-desktop': productsLogo.value?.sizes?.desktop || '62px'
+}))
 
 // Derived button sizes
 const buttonWidth = computed(() => (isMobile.value ? "144px" : "320px"));
@@ -237,5 +184,21 @@ const getAdditionalPropsForSection = (section: PageSectionReference) => {
 </script>
 
 <style scoped>
-/* Products page styles */
+/* Responsive logo sizing using CSS variables - no JS flicker */
+.products-logo {
+  height: var(--products-logo-height);
+  width: auto;
+}
+
+@media (min-width: 768px) {
+  .products-logo {
+    height: var(--products-logo-height-tablet);
+  }
+}
+
+@media (min-width: 1024px) {
+  .products-logo {
+    height: var(--products-logo-height-desktop);
+  }
+}
 </style>

@@ -22,19 +22,7 @@
           <h2 
             v-if="heading?.show !== false"
             v-motion 
-            :initial="{ opacity: 0, y: 32 }" 
-            :visible-once="{
-              opacity: 1,
-              y: 0,
-              transition: {
-                duration: 400,
-                type: 'ease-in',
-                stiffness: 250,
-                damping: 25,
-                mass: 1,
-                delay: 100,
-              },
-            }" 
+            v-bind="fadeUpSubtle(100)"
             :class="[
               'font-semibold text-[20px] md:text-[28px] lg:text-[32px]',
               headingColorClass
@@ -45,19 +33,7 @@
           <p 
             v-if="subheading?.show !== false"
             v-motion 
-            :initial="{ opacity: 0, y: 32 }" 
-            :visible-once="{
-              opacity: 1,
-              y: 0,
-              transition: {
-                duration: 400,
-                type: 'ease-in',
-                stiffness: 250,
-                damping: 25,
-                mass: 1,
-                delay: 150,
-              },
-            }" 
+            v-bind="fadeUpSubtle(150)"
             :class="[
               'pt-5 text-[16px] md:text-[20px] lg:text-[28px] font-regular',
               subheadingColorClass
@@ -72,19 +48,7 @@
               :key="index"
               v-if="button && button.show !== false"
               v-motion 
-              :initial="{ opacity: 0, y: 32 }" 
-              :visible-once="{
-                opacity: 1,
-                y: 0,
-                transition: {
-                  duration: 400,
-                  type: 'ease-in',
-                  stiffness: 250,
-                  damping: 25,
-                  mass: 1,
-                  delay: 200 + (index * 50),
-                },
-              }" 
+              v-bind="fadeUpSubtle(200 + (index * 50))"
               ghost 
               decorative 
               :width="isMobile ? '145px' : '320px'" 
@@ -96,18 +60,7 @@
           </div>
 
           <div class="pt-7 lg:pt-[50px] grid grid-cols-2 gap-x-4 lg:gap-x-10 gap-y-2 lg:gap-y-4 font-medium  lg:max-w-[66%]">
-            <div v-for="(feature, index) in bulletPointsItems" :key="index" v-motion :initial="{ opacity: 0, y: 32 }" :visible-once="{
-              opacity: 1,
-              y: 0,
-              transition: {
-                duration: 400,
-                type: 'ease-in',
-                stiffness: 250,
-                damping: 25,
-                mass: 1,
-                delay: 300 + (index * 50),
-              },
-            }" class="flex gap-1 items-center text-[12px] md:text-[20px] lg:text-[24px] font-medium">
+            <div v-for="(feature, index) in bulletPointsItems" :key="index" v-motion v-bind="fadeUpSubtle(300 + (index * 50))" class="flex gap-1 items-center text-[12px] md:text-[20px] lg:text-[24px] font-medium">
               <UiIcon 
                 :src="bulletPointIconSrc" 
                 :icon-color="bulletPointIconColor"
@@ -126,8 +79,14 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted, computed } from "vue";
+import { computed } from "vue";
+import { useBreakpoints } from "~/composables/useBreakpoints";
+import { useMotionPresets } from "~/composables/useMotionPresets";
 import { resolveColorToken, resolveIconColor } from '~/utils/colorTokens';
+
+// Composables
+const { isMobile } = useBreakpoints()
+const { fadeUpSubtle } = useMotionPresets()
 
 // Define props
 const props = defineProps({
@@ -183,20 +142,6 @@ const foregroundHeight = computed(() => {
   if (!media.value?.product) return '222px';
   if (isMobile.value) return '320px';
   return 'auto';
-});
-
-const isMobile = ref(false);
-const checkMobile = () => {
-  isMobile.value = window.innerWidth <= 768;
-};
-
-onMounted(() => {
-  checkMobile();
-  window.addEventListener("resize", checkMobile);
-});
-
-onUnmounted(() => {
-  window.removeEventListener("resize", checkMobile);
 });
 
 // Resolve color classes using color utilities

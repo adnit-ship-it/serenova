@@ -62,8 +62,12 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted, computed } from "vue";
+import { computed } from "vue";
+import { useBreakpoints } from "~/composables/useBreakpoints";
 import { resolveColorToken } from '~/utils/colorTokens';
+
+// Composables
+const { isMobile } = useBreakpoints()
 
 // Define props
 const props = defineProps({
@@ -73,24 +77,7 @@ const props = defineProps({
   }
 })
 
-// Mobile detection
-const isMobile = ref(false);
-
-// Check mobile on mount and resize
-const checkMobile = () => {
-    isMobile.value = window.innerWidth <= 768;
-};
-
-onMounted(() => {
-    checkMobile();
-    window.addEventListener("resize", checkMobile);
-});
-
-onUnmounted(() => {
-    window.removeEventListener("resize", checkMobile);
-});
-
-// Derived button sizes
+// Derived button sizes (global/consistent across site)
 const buttonWidth = computed(() => (isMobile.value ? "144px" : "170px"));
 const buttonHeight = computed(() => (isMobile.value ? "28px" : "44px"));
 const buttonFontSize = computed(() => (isMobile.value ? "16" : "24"));

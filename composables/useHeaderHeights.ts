@@ -1,19 +1,9 @@
-import { ref, computed, onMounted, onUnmounted } from 'vue'
+import { computed } from 'vue'
+import { useBreakpoints } from './useBreakpoints'
 
 export function useHeaderHeights() {
   const config = useAppConfig()
-
-  // Breakpoint detection (mobile-first defaults for SSR)
-  const isMobile = ref(true)
-  const isTablet = ref(false)
-
-  // Update breakpoints based on window width
-  const updateBreakpoints = () => {
-    if (typeof window === 'undefined') return
-    const width = window.innerWidth
-    isMobile.value = width < 768
-    isTablet.value = width >= 768 && width < 1024
-  }
+  const { isMobile, isTablet } = useBreakpoints()
 
   // Get navbar height from global config
   const navbarHeight = computed(() => {
@@ -47,25 +37,12 @@ export function useHeaderHeights() {
     '--header-offset': headerOffset.value
   }))
 
-  // Setup resize listener
-  onMounted(() => {
-    updateBreakpoints()
-    window.addEventListener('resize', updateBreakpoints)
-  })
-
-  onUnmounted(() => {
-    if (typeof window !== 'undefined') {
-      window.removeEventListener('resize', updateBreakpoints)
-    }
-  })
-
   return {
     isMobile,
     isTablet,
     navbarHeight,
     announcementHeight,
     headerOffset,
-    cssVariables,
-    updateBreakpoints
+    cssVariables
   }
 }

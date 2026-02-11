@@ -2,27 +2,18 @@
   <Transition enter-active-class="transition-all duration-400 ease-in-out" enter-from-class="translate-y-full opacity-0"
     enter-to-class="translate-y-0 opacity-100" leave-active-class="transition-all duration-500 ease-in-out"
     leave-from-class="opacity-100" leave-to-class="opacity-0">
-    <div v-if="isVisible" class="fixed inset-0 z-[9999] bg-backgroundColor flex flex-col items-center justify-center"
-      :class="{ 'pointer-events-none': isFadingOut }">
-      <img v-motion :initial="{ opacity: 0, y: 32 }" :visible-once="{
-        opacity: 1,
-        y: 0,
-        transition: {
-          duration: 400,
-          type: 'ease-in',
-          stiffness: 250,
-          damping: 25,
-          mass: 1,
-        },
-      }" :src="loadingLogoSrc" :alt="loadingLogoAlt" class="mb-6" :style="{ height: loadingLogoHeight, width: loadingLogoWidth }" />
+    <div v-if="isVisible" class="loading-screen fixed inset-0 z-[9999] bg-backgroundColor flex flex-col items-center justify-center"
+      :class="{ 'pointer-events-none': isFadingOut }"
+      :style="responsiveCSSVars">
+      <img v-motion v-bind="fadeUpSubtle()" :src="loadingLogoSrc" :alt="loadingLogoAlt" class="loading-logo mb-6" />
       <p class="text-lg text-gray-600 font-medium">{{ loadingText }}</p>
     </div>
   </Transition>
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, onUnmounted, ref } from 'vue'
-import { getLogoSize } from '~/utils/branding'
+import { computed } from 'vue'
+import { useMotionPresets } from '~/composables/useMotionPresets'
 
 interface Props {
   isVisible: boolean
@@ -33,26 +24,21 @@ defineProps<Props>()
 
 const config = useAppConfig()
 
+// Use shared composables
+const { fadeUpSubtle } = useMotionPresets()
+
 const loadingLogoSrc = computed(() => config.loadingScreen.logo.src)
 const loadingLogoAlt = computed(() => config.loadingScreen.logo.alt || config.strings.accessibility.brandLogo || 'Brand logo')
 const loadingText = computed(() => config.loadingScreen.text)
 
-const isMobile = ref(false)
-const updateIsMobile = () => {
-  if (!process.client) return
-  isMobile.value = window.innerWidth <= 768
-}
-
-const loadingLogoHeight = computed(() => getLogoSize('loadingScreen', 'height', isMobile.value))
-const loadingLogoWidth = computed(() => getLogoSize('loadingScreen', 'width', isMobile.value))
-
-onMounted(() => {
-  updateIsMobile()
-  window.addEventListener('resize', updateIsMobile)
-})
-
-onUnmounted(() => {
-  window.removeEventListener('resize', updateIsMobile)
+// CSS variables for responsive logo sizes from common.json via app.config
+const responsiveCSSVars = computed(() => {
+  const logoSizes = config.logoSizes?.loadingScreen
+  return {
+    '--loading-logo-height': logoSizes?.height?.mobile || '20px',
+    '--loading-logo-height-tablet': logoSizes?.height?.tablet || logoSizes?.height?.desktop || '80px',
+    '--loading-logo-height-desktop': logoSizes?.height?.desktop || '132px'
+  }
 })
 </script>
 
@@ -64,5 +50,23 @@ onUnmounted(() => {
   left: 0;
   right: 0;
   bottom: 0;
+}
+
+/* Responsive logo sizing using CSS variables - no JS flicker */
+.loading-logo {
+  height: var(--loading-logo-height);
+  width: auto;
+}
+
+@media (min-width: 768px) {
+  .loading-logo {
+    height: var(--loading-logo-height-tablet);
+  }
+}
+
+@media (min-width: 1024px) {
+  .loading-logo {
+    height: var(--loading-logo-height-desktop);
+  }
 }
 </style>

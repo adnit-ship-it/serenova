@@ -2,17 +2,7 @@
   <UiSectionWrapper class="flex-col py-20">
     <!-- Heading -->
     <UiSectionContainer>
-      <h2 v-motion :initial="{ opacity: 0, y: 32 }" :visible-once="{
-        opacity: 1,
-        y: 0,
-        transition: {
-          duration: 400,
-          type: 'ease-in',
-          stiffness: 250,
-          damping: 25,
-          mass: 1,
-        },
-      }" 
+      <h2 v-motion v-bind="fadeUpSubtle()" 
         v-if="showTitle && heading?.show !== false"
         :class="[
           'pb-[24px] text-[20px] md:text-[28px] lg:text-[32px] font-semibold md:text-left',
@@ -40,8 +30,10 @@ import { ref, computed } from "vue";
 import { useCRMStore } from "~/stores/crmStore";
 import { resolveColorToken } from "~/utils/colorTokens";
 import { products as staticProductCatalog } from "~/data/intake-form/products";
+import { useMotionPresets } from '~/composables/useMotionPresets';
 
 const crmStore = useCRMStore();
+const { fadeUpSubtle } = useMotionPresets();
 
 // Define props
 const props = defineProps({

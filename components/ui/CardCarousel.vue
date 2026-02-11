@@ -5,18 +5,7 @@
       'relative flex flex-col md:flex-row items-center w-full lg:h-[460px] border-t border-b border-l border-[#D9D9D9] overflow-hidden scrollbar-hide',
       showNavigation ? 'justify-start' : 'justify-center'
     ]">
-    <div v-for="(item, index) in items" :ref="el => { if (el) cardRefs[index] = el }" v-motion :initial="{ opacity: 0, y: 100 }" :visible-once="{
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 500,
-        type: 'ease-in',
-        stiffness: 250,
-        damping: 25,
-        mass: 1,
-        delay: 50 * index,
-      },
-    }" :key="item.productName || index" :class="[
+    <div v-for="(item, index) in items" :ref="el => { if (el) cardRefs[index] = el }" v-motion v-bind="fadeUp(50 * index)" :key="item.productName || index" :class="[
       'w-[300px] flex h-[350px] md:w-[340px] md:h-[390px] lg:h-[460px] lg:w-[405px] p-6 md:p-5 lg:p-7 border-x md:border-l-0 lg:border-b-0 lg:border-l-0 first:border-l ',
       index === currentIndex ? 'block' : 'hidden md:block',
     ]" @click="onCardClick(item)">
@@ -57,6 +46,9 @@
 
 <script setup>
 import { ref, nextTick, onMounted, onUnmounted, watch } from "vue";
+import { useMotionPresets } from '~/composables/useMotionPresets';
+
+const { fadeUp } = useMotionPresets();
 
 const props = defineProps({
   items: {

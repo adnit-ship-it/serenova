@@ -1,46 +1,13 @@
 <template>
-  <div class="mx-auto bg-backgroundColor min-h-[98vh] pt-12 md:pt-16 pb-12 md:pb-32 flex flex-col items-center px-4 lg:px-8 md:px-0">
-    <img v-motion :initial="{ opacity: 0, y: 32 }" :visible-once="{
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 400,
-        type: 'ease-in',
-        stiffness: 250,
-        damping: 25,
-        mass: 1,
-      },
-    }" 
+  <div class="contact-page mx-auto bg-backgroundColor min-h-[98vh] pt-12 md:pt-16 pb-12 md:pb-32 flex flex-col items-center px-4 lg:px-8 md:px-0" :style="responsiveCSSVars">
+    <img v-motion v-bind="fadeUpSubtle()" 
       :src="logoUrl" 
       :alt="`${organizationName} Logo`" 
-      class="object-cover"
-      :style="{ height: contactLogoHeight, width: contactLogoWidth }" />
-    <h2 v-motion :initial="{ opacity: 0, y: 32 }" :visible-once="{
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 400,
-        type: 'ease-in',
-        stiffness: 250,
-        damping: 25,
-        mass: 1,
-        delay: 50,
-      },
-    }" class="text-[20px] md:text-[32px] font-semibold text-center mt-6 md:mt-12 px-4 lg:px-12">
+      class="contact-logo object-cover" />
+    <h2 v-motion v-bind="fadeUpSubtle(50)" class="text-[20px] md:text-[32px] font-semibold text-center mt-6 md:mt-12 px-4 lg:px-12">
       {{ pageConfig?.pageTitle || pageConfig?.title || 'Contact Us: Fill out the form and hear back from us' }}
     </h2>
-    <div v-motion :initial="{ opacity: 0, y: 32 }" :visible-once="{
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 400,
-        type: 'ease-in',
-        stiffness: 250,
-        damping: 25,
-        mass: 1,
-        delay: 100,
-      },
-    }" class="max-w-[1056px] w-full mx-auto mt-4">
+    <div v-motion v-bind="fadeUpSubtle(100)" class="max-w-[1056px] w-full mx-auto mt-4">
       <form @submit.prevent="handleSubmit" class="flex flex-col gap-6 px-2 lg:px-6">
         <div>
           <label class="block text-lg md:text-xl text-black mb-1">{{ pageConfig?.form?.labels?.name || 'Name' }}</label>
@@ -94,8 +61,8 @@
 </template>
 
 <script setup>
-import { ref, reactive, computed, onMounted, onUnmounted } from 'vue'
-import { getLogoSize } from '~/utils/branding'
+import { ref, reactive, computed } from 'vue'
+import { useMotionPresets } from '~/composables/useMotionPresets'
 
 const props = defineProps({
   pageConfig: {
@@ -104,31 +71,18 @@ const props = defineProps({
   }
 });
 
+// Use shared composables
+const { fadeUpSubtle } = useMotionPresets();
+
 const logoUrl = computed(() => props.pageConfig?.logo?.src || '/assets/images/brand/logo-secondary-1.svg')
 const organizationName = computed(() => props.pageConfig?.logo?.alt || 'Serenova')
 
-// Responsive breakpoint detection
-const isMobile = ref(false);
-const isTablet = ref(false);
-
-const checkBreakpoints = () => {
-  if (typeof window === 'undefined') return;
-  const width = window.innerWidth;
-  isMobile.value = width < 768;
-  isTablet.value = width >= 768 && width < 1024;
-};
-
-const contactLogoHeight = computed(() => getLogoSize('contact', 'height', isMobile.value, isTablet.value));
-const contactLogoWidth = computed(() => getLogoSize('contact', 'width', isMobile.value, isTablet.value));
-
-onMounted(() => {
-  checkBreakpoints();
-  window.addEventListener("resize", checkBreakpoints);
-});
-
-onUnmounted(() => {
-  window.removeEventListener("resize", checkBreakpoints);
-});
+// CSS variables for responsive logo sizes - read directly from pageConfig.logo.sizes
+const responsiveCSSVars = computed(() => ({
+  '--contact-logo-height': props.pageConfig?.logo?.sizes?.mobile || '56px',
+  '--contact-logo-height-tablet': props.pageConfig?.logo?.sizes?.tablet || props.pageConfig?.logo?.sizes?.desktop || '72px',
+  '--contact-logo-height-desktop': props.pageConfig?.logo?.sizes?.desktop || '88px'
+}))
 
 // Form data state
 const formData = reactive({
@@ -274,5 +228,21 @@ const handleSubmit = async () => {
 </script>
 
 <style scoped>
-/* Contact page styles */
+/* Responsive logo sizing using CSS variables - no JS flicker */
+.contact-logo {
+  height: var(--contact-logo-height);
+  width: auto;
+}
+
+@media (min-width: 768px) {
+  .contact-logo {
+    height: var(--contact-logo-height-tablet);
+  }
+}
+
+@media (min-width: 1024px) {
+  .contact-logo {
+    height: var(--contact-logo-height-desktop);
+  }
+}
 </style>

@@ -1,36 +1,14 @@
 <template>
   <UiSectionWrapper class="flex-col py-20">
     <UiSectionContainer>
-      <h2 v-motion :initial="{ opacity: 0, y: 32 }" :visible-once="{
-        opacity: 1,
-        y: 0,
-        transition: {
-          duration: 400,
-          type: 'ease-in',
-          stiffness: 250,
-          damping: 25,
-          mass: 1,
-          delay: 100,
-        },
-      }" class="pb-[24px] font-defaultSerif text-[20px] md:text-[28px] lg:text-[32px] font-semibold text-black">
+      <h2 v-motion v-bind="fadeUpSubtle(100)" class="pb-[24px] font-defaultSerif text-[20px] md:text-[28px] lg:text-[32px] font-semibold text-black">
         {{ reviewsText?.title }}
       </h2>
     </UiSectionContainer>
 
 
     <div class="w-full flex flex-col gap-5 md:gap-8">
-      <NuxtMarquee  v-motion :initial="{ opacity: 0, y: 32 }" :visible-once="{
-        opacity: 1,
-        y: 0,
-        transition: {
-          duration: 400,
-          type: 'ease-in',
-          stiffness: 250,
-          damping: 25,
-          mass: 1,
-          delay: 100,
-        },
-      }"  :speed="marqueeSpeed || 50" :autoFill="true" class="flex gap-8">
+      <NuxtMarquee v-motion v-bind="fadeUpSubtle(100)" :speed="marqueeSpeed || 50" :autoFill="true" class="flex gap-8">
         <div class="flex gap-5 md:gap-8">
           <div v-for="review in topReviews" :key="`top-${review.name}`"
             :class="[
@@ -69,18 +47,7 @@
         </div>
       </NuxtMarquee>
 
-      <NuxtMarquee  v-motion :initial="{ opacity: 0, y: 32 }" :visible-once="{
-        opacity: 1,
-        y: 0,
-        transition: {
-          duration: 400,
-          type: 'ease-in',
-          stiffness: 250,
-          damping: 25,
-          mass: 1,
-          delay: 100,
-        },
-      }"  :speed="marqueeSpeed || 50" :direction="'right'" :autoFill="true" class="flex gap-8">
+      <NuxtMarquee v-motion v-bind="fadeUpSubtle(100)" :speed="marqueeSpeed || 50" :direction="'right'" :autoFill="true" class="flex gap-8">
         <div class="flex gap-5 md:gap-8">
           <div v-for="review in bottomReviews" :key="`bottom-${review.name}`"
             :class="[
@@ -129,6 +96,9 @@
 <script setup>
 import { computed } from 'vue'
 import { resolveColorToken, resolveIconColor } from '~/utils/colorTokens'
+import { useMotionPresets } from '~/composables/useMotionPresets'
+
+const { fadeUpSubtle } = useMotionPresets()
 
 // Define props
 const props = defineProps({

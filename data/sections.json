@@ -7,7 +7,12 @@
                     "src": "/assets/images/brand/logo-primary-1.svg",
                     "alt": "brand logo",
                     "type": "svg-image",
-                    "show": true
+                    "show": true,
+                    "sizes": {
+                        "mobile": "34px",
+                        "tablet": "38px",
+                        "desktop": "62px"
+                    }
                 },
                 "heading": {
                     "text": "Confidence, We Got You",
@@ -408,7 +413,12 @@
                     "src": "/assets/images/brand/logo-secondary-1.svg",
                     "alt": "brand logo",
                     "type": "svg-image",
-                    "show": true
+                    "show": true,
+                    "sizes": {
+                        "mobile": "34px",
+                        "tablet": "38px",
+                        "desktop": "62px"
+                    }
                 }
             },
             {
@@ -544,7 +554,12 @@
                     "src": "/assets/images/brand/logo-primary-1.svg",
                     "alt": "brand logo",
                     "type": "svg-image",
-                    "show": true
+                    "show": true,
+                    "sizes": {
+                        "mobile": "56px",
+                        "tablet": "72px",
+                        "desktop": "88px"
+                    }
                 },
                 "heading": {
                     "text": "Contact Us: Fill out the form and hear back from us",

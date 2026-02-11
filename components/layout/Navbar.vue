@@ -1,26 +1,15 @@
 <template>
   <nav 
     :class="[
-      'w-full fixed z-50 flex justify-center shadow-lg',
+      'navbar w-full fixed z-50 flex justify-center shadow-lg',
       props.color || 'bg-white'
     ]"
-    :style="{ top: 'var(--announcement-height, 0px)' }"
+    :style="{ ...responsiveCSSVars, top: 'var(--announcement-height, 0px)' }"
   >
-    <div v-motion :initial="{ opacity: 0.3, y: 8 }" :visible-once="{
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 400,
-        type: 'ease-in',
-        stiffness: 250,
-        damping: 25,
-        mass: 1,
-      },
-    }"       :class="[
-        'lg:max-w-[1328px] w-full flex justify-center px-4 md:px-8 pb-2 md:pb-0',
+    <div v-motion v-bind="fadeUpMinimal()" :class="[
+        'navbar-inner lg:max-w-[1328px] w-full flex justify-center px-4 md:px-8 pb-2 md:pb-0',
         props.hideNavigation ? 'justify-center' : 'justify-between',
-      ]"
-      :style="{ height: navbarHeight }">
+      ]">
       <!-- Mobile hamburger menu on the left -->
       <button v-if="!props.hideNavigation" class="md:hidden rounded" :aria-label="config.strings.accessibility.toggleMenu" @click="toggleMobileMenu">
         <img :src="config.strings.media.hamburgerMenu.src" :alt="config.strings.accessibility.menu" class="h-4 w-4" />
@@ -29,7 +18,7 @@
       <!-- Logo on center-->
       <div class="flex items-center">
         <NuxtLink to="/">
-          <img :src="navbarLogoSrc" :alt="navbarLogoAlt" :style="{ height: logoHeight, width: logoWidth }" />
+          <img :src="navbarLogoSrc" :alt="navbarLogoAlt" class="navbar-logo" />
         </NuxtLink>
       </div>
       <div class="flex items-center gap-10">
@@ -83,13 +72,16 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted, computed } from "vue";
+import { ref, computed, onMounted, onUnmounted } from "vue";
 import { usePagesStore } from '~/stores/pagesStore'
-import { getLogoSize } from '~/utils/branding'
+import { useMotionPresets } from '~/composables/useMotionPresets'
 
 const pagesStore = usePagesStore();
 const config = useAppConfig();
 const navigationPages = computed(() => pagesStore.navigationPages);
+
+// Use shared composables
+const { fadeUpMinimal } = useMotionPresets();
 
 // Define the color prop with a default value of 'bg-white'
 const props = defineProps({
@@ -107,26 +99,19 @@ const props = defineProps({
 const navbarLogoSrc = computed(() => config.navbar.logo.src);
 const navbarLogoAlt = computed(() => config.navbar.logo.alt || config.strings.accessibility.brandLogo || "Brand logo");
 
-// Responsive breakpoint detection
-const isMobile = ref(false);
-const isTablet = ref(false);
-
-const checkBreakpoints = () => {
-  const width = window.innerWidth;
-  isMobile.value = width < 768;
-  isTablet.value = width >= 768 && width < 1024;
-};
-
-// Responsive heights (from global navbar config)
-const navbarHeight = computed(() => {
-  const heights = config.navbar.heights;
-  if (isMobile.value) return heights.mobile;
-  if (isTablet.value) return heights.tablet || heights.desktop;
-  return heights.desktop;
-});
-
-const logoHeight = computed(() => getLogoSize('navbar', 'height', isMobile.value, isTablet.value));
-const logoWidth = computed(() => getLogoSize('navbar', 'width', isMobile.value, isTablet.value));
+// CSS variables for responsive sizes from common.json via app.config
+const responsiveCSSVars = computed(() => {
+  const logoSizes = config.logoSizes?.navbar
+  const heights = config.navbar.heights
+  return {
+    '--navbar-height': heights?.mobile || '83px',
+    '--navbar-height-tablet': heights?.tablet || heights?.desktop || '68px',
+    '--navbar-height-desktop': heights?.desktop || '68px',
+    '--navbar-logo-height': logoSizes?.height?.mobile || '24px',
+    '--navbar-logo-height-tablet': logoSizes?.height?.tablet || logoSizes?.height?.desktop || '28px',
+    '--navbar-logo-height-desktop': logoSizes?.height?.desktop || '28px'
+  }
+})
 
 // Mobile menu state
 const isMobileMenuOpen = ref(false);
@@ -151,16 +136,46 @@ const handleClickOutside = (event) => {
 // Add click outside listener
 onMounted(() => {
   document.addEventListener("click", handleClickOutside);
-  checkBreakpoints();
-  window.addEventListener("resize", checkBreakpoints);
 });
 
 onUnmounted(() => {
   document.removeEventListener("click", handleClickOutside);
-  window.removeEventListener("resize", checkBreakpoints);
 });
 </script>
 
 <style scoped>
-/* Custom styles if needed */
+/* Responsive navbar height using CSS variables - no JS flicker */
+.navbar-inner {
+  height: var(--navbar-height);
+}
+
+@media (min-width: 768px) {
+  .navbar-inner {
+    height: var(--navbar-height-tablet);
+  }
+}
+
+@media (min-width: 1024px) {
+  .navbar-inner {
+    height: var(--navbar-height-desktop);
+  }
+}
+
+/* Responsive logo sizing using CSS variables - no JS flicker */
+.navbar-logo {
+  height: var(--navbar-logo-height);
+  width: auto;
+}
+
+@media (min-width: 768px) {
+  .navbar-logo {
+    height: var(--navbar-logo-height-tablet);
+  }
+}
+
+@media (min-width: 1024px) {
+  .navbar-logo {
+    height: var(--navbar-logo-height-desktop);
+  }
+}
 </style>

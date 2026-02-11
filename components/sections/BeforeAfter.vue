@@ -1,18 +1,7 @@
 <template>
   <UiSectionWrapper class="py-20 md:py-32 flex flex-col bg-backgroundColor">
     <UiSectionContainer>
-      <h2 v-motion :initial="{ opacity: 0, y: 32 }" :visible-once="{
-        opacity: 1,
-        y: 0,
-        transition: {
-          duration: 400,
-          type: 'ease-in',
-          stiffness: 250,
-          damping: 25,
-          mass: 1,
-          delay: 100,
-        },
-      }" :class="[
+      <h2 v-motion v-bind="fadeUpSubtle(100)" :class="[
         'text-[20px] md:text-[28px] lg:text-[32px] font-semibold text-center mb-12',
         headingColorClass
       ]">
@@ -27,6 +16,9 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { resolveColorToken } from '~/utils/colorTokens'
+import { useMotionPresets } from '~/composables/useMotionPresets'
+
+const { fadeUpSubtle } = useMotionPresets()
 
 // Define props
 const props = defineProps({

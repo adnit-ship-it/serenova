@@ -1,20 +1,10 @@
-import { ref, computed, onMounted, onUnmounted } from 'vue'
+import { computed } from 'vue'
+import { useBreakpoints } from './useBreakpoints'
 import type { PageSectionReference } from '~/types/pages'
 
 export function useSectionSpacing() {
   const config = useAppConfig()
-
-  // Breakpoint detection (mobile-first defaults for SSR)
-  const isMobile = ref(true)
-  const isTablet = ref(false)
-
-  // Update breakpoints based on window width
-  const updateBreakpoints = () => {
-    if (typeof window === 'undefined') return
-    const width = window.innerWidth
-    isMobile.value = width < 768
-    isTablet.value = width >= 768 && width < 1024
-  }
+  const { isMobile, isTablet } = useBreakpoints()
 
   // Get default gap based on current breakpoint
   const getDefaultGap = computed(() => {
@@ -50,24 +40,11 @@ export function useSectionSpacing() {
     return style
   }
 
-  // Setup resize listener
-  onMounted(() => {
-    updateBreakpoints()
-    window.addEventListener('resize', updateBreakpoints)
-  })
-
-  onUnmounted(() => {
-    if (typeof window !== 'undefined') {
-      window.removeEventListener('resize', updateBreakpoints)
-    }
-  })
-
   return {
     isMobile,
     isTablet,
     getDefaultGap,
     getSectionGap,
-    getSectionStyle,
-    updateBreakpoints
+    getSectionStyle
   }
 }

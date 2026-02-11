@@ -1,8 +1,10 @@
 <script setup lang="ts">
-import { computed, ref, onMounted, onUnmounted } from 'vue';
-import { UiSectionWrapper, UiSectionContainer } from '#components';
+import { computed } from 'vue';
+import { useMotionPresets } from '~/composables/useMotionPresets';
 import { resolveColorToken } from '~/utils/colorTokens';
-import { getLogoSize } from '~/utils/branding';
+
+// Composables
+const { fadeUp } = useMotionPresets()
 
 // Define props
 const props = defineProps({
@@ -19,30 +21,12 @@ const subheading = computed(() => props.sectionData?.subheading)
 const paragraph = computed(() => props.sectionData?.paragraph)
 const media = computed(() => props.sectionData?.media)
 
-console.log('props.sectionData,', props.sectionData)
-
-// Mobile detection
-const isMobile = ref(false);
-const isTablet = ref(false);
-
-const checkBreakpoints = () => {
-  if (!process.client) return;
-  const width = window.innerWidth;
-  isMobile.value = width < 768;
-  isTablet.value = width >= 768 && width < 1024;
-};
-
-const logoHeight = computed(() => getLogoSize('hero', 'height', isMobile.value, isTablet.value));
-const logoWidth = computed(() => getLogoSize('hero', 'width', isMobile.value, isTablet.value));
-
-onMounted(() => {
-  checkBreakpoints();
-  window.addEventListener("resize", checkBreakpoints);
-});
-
-onUnmounted(() => {
-  window.removeEventListener("resize", checkBreakpoints);
-});
+// CSS variables for responsive logo sizes - read directly from sectionData
+const responsiveCSSVars = computed(() => ({
+  '--about-logo-height': logo.value?.sizes?.mobile || 'auto',
+  '--about-logo-height-tablet': logo.value?.sizes?.tablet || logo.value?.sizes?.desktop || 'auto',
+  '--about-logo-height-desktop': logo.value?.sizes?.desktop || 'auto'
+}))
 
 // Resolve color classes using color utilities
 const headingColorClass = computed(() => {
@@ -62,39 +46,17 @@ const paragraphColorClass = computed(() => {
 </script>
 
 <template>
-    <UiSectionWrapper class="py-20">
+    <UiSectionWrapper class="about-banner py-20" :style="responsiveCSSVars">
         <UiSectionContainer>
-            <img v-motion :initial="{ opacity: 0, y: 100 }" :visible-once="{
-                opacity: 1,
-                y: 0,
-                transition: {
-                    duration: 500,
-                    type: 'ease-in',
-                    stiffness: 250,
-                    damping: 25,
-                    mass: 1,
-                },
-            }" 
+            <img v-motion v-bind="fadeUp()"
                 v-if="logo?.show !== false"
                 :src="logo?.src" 
                 :alt="logo?.alt"
-                class="object-cover mx-auto " 
-                :style="{ height: logoHeight, width: logoWidth }"
+                class="about-logo object-cover mx-auto"
             />
             <div class="w-full flex flex-col md:flex-row gap-8 lg:gap-20 items-center mt-12 md:mt-6">
                 <div class="flex-1 h-full flex flex-col gap-2 lg:gap-6">
-                    <h1 v-motion :initial="{ opacity: 0, y: 100 }" :visible-once="{
-                        opacity: 1,
-                        y: 0,
-                        transition: {
-                            duration: 500,
-                            type: 'ease-in',
-                            stiffness: 250,
-                            damping: 25,
-                            mass: 1,
-                            delay: 50,
-                        },
-                    }" :class="[
+                    <h1 v-motion v-bind="fadeUp(50)" :class="[
                         'font-semibold text-[32px] lg:text-[48px] mb-2 lg:mb-4',
                         headingColorClass
                     ]">
@@ -103,19 +65,7 @@ const paragraphColorClass = computed(() => {
                     <h2 
                         v-if="subheading?.show !== false"
                         v-motion 
-                        :initial="{ opacity: 0, y: 100 }" 
-                        :visible-once="{
-                            opacity: 1,
-                            y: 0,
-                            transition: {
-                                duration: 500,
-                                type: 'ease-in',
-                                stiffness: 250,
-                                damping: 25,
-                                mass: 1,
-                                delay: 100,
-                            },
-                        }" 
+                        v-bind="fadeUp(100)"
                         :class="[
                             'font-semibold text-[24px] lg:text-[34px]',
                             subheadingColorClass
@@ -126,19 +76,7 @@ const paragraphColorClass = computed(() => {
                     <p 
                         v-if="paragraph?.show !== false"
                         v-motion 
-                        :initial="{ opacity: 0, y: 100 }" 
-                        :visible-once="{
-                            opacity: 1,
-                            y: 0,
-                            transition: {
-                                duration: 500,
-                                type: 'ease-in',
-                                stiffness: 250,
-                                damping: 25,
-                                mass: 1,
-                                delay: 150,
-                            },
-                        }" 
+                        v-bind="fadeUp(150)"
                         :class="[
                             'text-[24px] lg:text-[34px] font-light',
                             paragraphColorClass
@@ -148,21 +86,29 @@ const paragraphColorClass = computed(() => {
                     </p>
                 </div>
                 <div class="w-[160px] lg:w-[288px] h-full">
-                    <img v-motion :initial="{ opacity: 0, y: 100 }" :visible-once="{
-            opacity: 1,
-            y: 0,
-            transition: {
-              duration: 500,
-              type: 'ease-in',
-              stiffness: 250,
-              damping: 25,
-              mass: 1,
-              delay: 0,
-            },
-          }" src="/assets/images/products-alt.png" alt="products" class="w-full h-full object-cover" />
+                    <img v-motion v-bind="fadeUp()" src="/assets/images/products-alt.png" alt="products" class="w-full h-full object-cover" />
                 </div>
             </div>
         </UiSectionContainer>
     </UiSectionWrapper>
 </template>
 
+<style scoped>
+/* Responsive logo sizing using CSS variables - no JS flicker */
+.about-logo {
+  height: var(--about-logo-height);
+  width: auto;
+}
+
+@media (min-width: 768px) {
+  .about-logo {
+    height: var(--about-logo-height-tablet);
+  }
+}
+
+@media (min-width: 1024px) {
+  .about-logo {
+    height: var(--about-logo-height-desktop);
+  }
+}
+</style>

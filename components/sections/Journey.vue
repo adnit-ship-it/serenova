@@ -7,19 +7,7 @@
         <h2 
           v-if="heading?.show !== false"
           v-motion 
-          :initial="{ opacity: 0, y: 32 }" 
-          :visible-once="{
-            opacity: 1,
-            y: 0,
-            transition: {
-              duration: 400,
-              type: 'ease-in',
-              stiffness: 250,
-              damping: 25,
-              mass: 1,
-              delay: 50,
-            },
-          }"
+          v-bind="fadeUpSubtle(50)"
           :class="[
             'w-full text-[20px] md:text-[28px] lg:text-[32px] mb-9 md:mb-12 font-semibold text-center',
             headingColorClass
@@ -53,18 +41,7 @@
             </template>
           </div>
           <div class="w-full flex flex-col lg:flex-row gap-7 pl-4 flex-wrap justify-center items-center">
-            <UiJourneyCard v-motion :initial="{ opacity: 0, y: 8 }" :visible-once="{
-              opacity: 1,
-              y: 0,
-              transition: {
-                duration: 400,
-                type: 'ease-in-out',
-                stiffness: 250,
-                damping: 25,
-                mass: 1,
-                delay: 100 * index,
-              },
-            }" v-for="(card, index) in journeyCards" :key="index" :img="card.img" :title="card.title"
+            <UiJourneyCard v-motion v-bind="fadeUpMinimal(100 * index)" v-for="(card, index) in journeyCards" :key="index" :img="card.img" :title="card.title"
               :subtext="card.subtext" :is-active="index === 0" :isActive="card.isActive" :icon-color="card.iconColor" />
           </div>
         </div>
@@ -96,6 +73,12 @@
 <script setup>
 import { ref, onMounted, onUnmounted, computed, nextTick } from "vue";
 import { resolveColorToken, resolveIconColor } from '~/utils/colorTokens';
+import { useBreakpoints } from '~/composables/useBreakpoints';
+import { useMotionPresets } from '~/composables/useMotionPresets';
+
+// Use shared composables
+const { isTablet: isTabletBreakpoint } = useBreakpoints();
+const { fadeUpSubtle, fadeUpMinimal } = useMotionPresets();
 
 // Define props
 const props = defineProps({
@@ -163,10 +146,10 @@ const tabletDotThresholds = computed(() => {
 const tabletProgressHeight = 640; // Tablet progress line height
 const mobileProgressHeight = 456; // Mobile progress line height
 
-// Current thresholds based on screen size (reactive)
-const isTablet = ref(false)
+// Current thresholds based on screen size (reactive) - use local ref for scroll-based updates
+const isTabletLocal = ref(false)
 const currentThresholds = computed(() => {
-  return isTablet.value ? tabletDotThresholds.value : dotThresholds.value
+  return isTabletLocal.value ? tabletDotThresholds.value : dotThresholds.value
 })
 
 const updateProgress = () => {
@@ -175,8 +158,8 @@ const updateProgress = () => {
   const section = sectionRef.value;
   if (!section || typeof section.getBoundingClientRect !== 'function') return;
 
-  // Update tablet state
-  isTablet.value = window.innerWidth >= 768
+  // Update tablet state for scroll-based animation
+  isTabletLocal.value = window.innerWidth >= 768
 
   const rect = section.getBoundingClientRect();
   const sectionTop = rect.top;
@@ -195,7 +178,7 @@ const updateProgress = () => {
       Math.min(1, (rawProgress - startPoint) / (endPoint - startPoint))
     );
 
-    const currentProgressHeight = isTablet.value ? tabletProgressHeight : mobileProgressHeight;
+    const currentProgressHeight = isTabletLocal.value ? tabletProgressHeight : mobileProgressHeight;
     const thresholds = currentThresholds.value;
 
     // Update journey card active states based on progress thresholds

@@ -1,17 +1,16 @@
 <template>
-  <footer class="bg-[#E3D5D4] flex flex-col justify-center pb-4">
+  <footer class="footer bg-[#E3D5D4] flex flex-col justify-center pb-4" :style="responsiveCSSVars">
     <!-- Main footer row -->
     <div
-      class="max-w-[1328px] w-full mx-auto flex items-end justify-between md:justify-center px-4 md:px-8 md:gap-8"
-      :style="{ minHeight: footerHeight }"
+      class="footer-inner max-w-[1328px] w-full mx-auto flex items-end justify-between md:justify-center px-4 md:px-8 md:gap-8"
     >
       <div class="flex items-center">
         <NuxtLink to="/">
-          <div class="pb-1" :style="{ height: logoHeight, width: logoWidth }">
+          <div class="footer-logo-wrapper pb-1">
             <img
               :src="footerLogoSrc"
               :alt="footerLogoAlt"
-              class="h-full w-full"
+              class="footer-logo"
             />
           </div>
         </NuxtLink>
@@ -65,9 +64,8 @@
 </template>
 
 <script setup>
-import { computed, ref, onMounted, onUnmounted } from "vue";
+import { computed } from "vue";
 import { useLegalStore } from '~/stores/legalStore';
-import { getLogoSize } from '~/utils/branding';
 
 const config = useAppConfig();
 const legalStore = useLegalStore();
@@ -79,37 +77,59 @@ const legalLinks = computed(() => legalStore.footerLinks);
 const footerLogoSrc = computed(() => config.footer.logo.src);
 const footerLogoAlt = computed(() => config.footer.logo.alt || config.strings.accessibility.brandLogo || "Brand logo");
 
-// Responsive breakpoint detection
-const isMobile = ref(false);
-const isTablet = ref(false);
-
-const checkBreakpoints = () => {
-  const width = window.innerWidth;
-  isMobile.value = width < 768;
-  isTablet.value = width >= 768 && width < 1024;
-};
-
-// Responsive heights from global config
-const footerHeight = computed(() => {
-  const heights = config.footer.heights;
-  if (isMobile.value) return heights.mobile;
-  if (isTablet.value) return heights.tablet || heights.desktop;
-  return heights.desktop;
-});
-
-const logoHeight = computed(() => getLogoSize('footer', 'height', isMobile.value, isTablet.value));
-const logoWidth = computed(() => getLogoSize('footer', 'width', isMobile.value, isTablet.value));
-
-onMounted(() => {
-  checkBreakpoints();
-  window.addEventListener("resize", checkBreakpoints);
-});
-
-onUnmounted(() => {
-  window.removeEventListener("resize", checkBreakpoints);
-});
+// CSS variables for responsive sizes from common.json via app.config
+const responsiveCSSVars = computed(() => {
+  const logoSizes = config.logoSizes?.footer
+  const heights = config.footer.heights
+  return {
+    '--footer-height': heights?.mobile || '64px',
+    '--footer-height-tablet': heights?.tablet || heights?.desktop || '72px',
+    '--footer-height-desktop': heights?.desktop || '72px',
+    '--footer-logo-height': logoSizes?.height?.mobile || '20px',
+    '--footer-logo-height-tablet': logoSizes?.height?.tablet || logoSizes?.height?.desktop || '26px',
+    '--footer-logo-height-desktop': logoSizes?.height?.desktop || '32px'
+  }
+})
 </script>
 
 <style scoped>
-/* Custom styles if needed */
+/* Responsive footer height using CSS variables - no JS flicker */
+.footer-inner {
+  min-height: var(--footer-height);
+}
+
+@media (min-width: 768px) {
+  .footer-inner {
+    min-height: var(--footer-height-tablet);
+  }
+}
+
+@media (min-width: 1024px) {
+  .footer-inner {
+    min-height: var(--footer-height-desktop);
+  }
+}
+
+/* Responsive logo sizing using CSS variables - no JS flicker */
+.footer-logo-wrapper {
+  height: var(--footer-logo-height);
+  width: auto;
+}
+
+.footer-logo {
+  height: 100%;
+  width: auto;
+}
+
+@media (min-width: 768px) {
+  .footer-logo-wrapper {
+    height: var(--footer-logo-height-tablet);
+  }
+}
+
+@media (min-width: 1024px) {
+  .footer-logo-wrapper {
+    height: var(--footer-logo-height-desktop);
+  }
+}
 </style>
