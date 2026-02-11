@@ -59,7 +59,7 @@
     </div>
     <NuxtLink v-if="button?.show !== false" to="/consultation" class="mt-16">
       <UiButton 
-        text-color="white" 
+        :text-color="buttonTextColor" 
         :background-color="buttonBackgroundColor" 
         width="229px"
       >
@@ -250,9 +250,13 @@ const borderColorClass = computed(() => {
   return resolveColorToken('bodyColor', 'border')
 })
 
-// Button background color
+// Button colors from JSON
 const buttonBackgroundColor = computed(() => {
-  return button.value?.color || 'accentColor1'
+  return button.value?.backgroundColor || 'accentColor1'
+})
+
+const buttonTextColor = computed(() => {
+  return button.value?.color || 'white'
 })
 
 onUnmounted(() => {

@@ -2,7 +2,7 @@
   <nav 
     :class="[
       'navbar w-full fixed z-50 flex justify-center shadow-lg',
-      props.color || 'bg-white'
+      navbarBackgroundColorClass
     ]"
     :style="{ ...responsiveCSSVars, top: 'var(--announcement-height, 0px)' }"
   >
@@ -30,7 +30,7 @@
             :key="page.key"
             :to="pagesStore.getPageRoute(page.key)"
           >
-            <p class="text-white text-lg font-medium">
+            <p :class="[navbarTextColorClass, 'text-lg font-medium']">
               {{ page.title }}
             </p>
           </NuxtLink>
@@ -75,6 +75,7 @@
 import { ref, computed, onMounted, onUnmounted } from "vue";
 import { usePagesStore } from '~/stores/pagesStore'
 import { useMotionPresets } from '~/composables/useMotionPresets'
+import { resolveColorToken } from '~/utils/colorTokens'
 
 const pagesStore = usePagesStore();
 const config = useAppConfig();
@@ -98,6 +99,22 @@ const props = defineProps({
 // Get navbar logo from global config
 const navbarLogoSrc = computed(() => config.navbar.logo.src);
 const navbarLogoAlt = computed(() => config.navbar.logo.alt || config.strings.accessibility.brandLogo || "Brand logo");
+
+// Navbar colors from config - prop overrides config
+const navbarBackgroundColorClass = computed(() => {
+  // If color prop is provided, use it (for backward compatibility)
+  if (props.color && props.color !== 'bg-white') {
+    return props.color
+  }
+  // Otherwise use config
+  const bgToken = config.navbar?.backgroundColor || 'accentColor1'
+  return resolveColorToken(bgToken, 'bg')
+})
+
+const navbarTextColorClass = computed(() => {
+  const textToken = config.navbar?.textColor || 'white'
+  return resolveColorToken(textToken, 'text')
+})
 
 // CSS variables for responsive sizes from common.json via app.config
 const responsiveCSSVars = computed(() => {

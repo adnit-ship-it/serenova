@@ -1,5 +1,5 @@
 <template>
-  <footer class="footer bg-[#E3D5D4] flex flex-col justify-center pb-4" :style="responsiveCSSVars">
+  <footer :class="['footer flex flex-col justify-center pb-4', footerBackgroundColorClass]" :style="responsiveCSSVars">
     <!-- Main footer row -->
     <div
       class="footer-inner max-w-[1328px] w-full mx-auto flex items-end justify-between md:justify-center px-4 md:px-8 md:gap-8"
@@ -15,25 +15,25 @@
           </div>
         </NuxtLink>
       </div>
-      <div class="md:block h-[1px] mb-1.5 w-full mx-2 md:mx-5 flex-1 bg-accentColor1"></div>
+      <div :class="['md:block h-[1px] mb-1.5 w-full mx-2 md:mx-5 flex-1', footerDividerColorClass]"></div>
 
       <!-- Navigation buttons on the right -->
       <div class="flex items-center gap-x-2 md:gap-x-6">
         <NuxtLink
           to="/about"
-          class="text-accentColor1 text-[14px] md:text-[18px] lg:text-[20px] transition-colors duration-200"
+          :class="[footerTextColorClass, 'text-[14px] md:text-[18px] lg:text-[20px] transition-colors duration-200']"
         >
           {{ config.strings.navigation.about }}
         </NuxtLink>
         <NuxtLink
           to="/contact"
-          class="text-accentColor1 text-[14px] md:text-[18px] lg:text-[20px] transition-colors duration-200"
+          :class="[footerTextColorClass, 'text-[14px] md:text-[18px] lg:text-[20px] transition-colors duration-200']"
         >
           {{ config.strings.navigation.contactUs }}
         </NuxtLink>
         <NuxtLink
           to="/products"
-          class="text-accentColor1 text-[14px] md:text-[18px] lg:text-[20px] transition-colors duration-200"
+          :class="[footerTextColorClass, 'text-[14px] md:text-[18px] lg:text-[20px] transition-colors duration-200']"
         >
           {{ config.strings.navigation.products }}
         </NuxtLink>
@@ -49,13 +49,13 @@
         <template v-for="(page, index) in legalLinks" :key="page.id">
           <NuxtLink 
             :to="`/legal/${page.slug}`" 
-            class="text-accentColor1 text-[10px] md:text-[12px] opacity-70 hover:opacity-100 transition-opacity duration-200"
+            :class="[footerTextColorClass, 'text-[10px] md:text-[12px] opacity-70 hover:opacity-100 transition-opacity duration-200']"
           >
             {{ page.footerLabel }}
           </NuxtLink>
           <span 
             v-if="index < legalLinks.length - 1" 
-            class="text-accentColor1 opacity-50 text-[10px] md:text-[12px]"
+            :class="[footerTextColorClass, 'opacity-50 text-[10px] md:text-[12px]']"
           >|</span>
         </template>
       </div>
@@ -66,6 +66,7 @@
 <script setup>
 import { computed } from "vue";
 import { useLegalStore } from '~/stores/legalStore';
+import { resolveColorToken } from '~/utils/colorTokens';
 
 const config = useAppConfig();
 const legalStore = useLegalStore();
@@ -76,6 +77,22 @@ const legalLinks = computed(() => legalStore.footerLinks);
 // Get footer config from app config
 const footerLogoSrc = computed(() => config.footer.logo.src);
 const footerLogoAlt = computed(() => config.footer.logo.alt || config.strings.accessibility.brandLogo || "Brand logo");
+
+// Footer colors from config
+const footerBackgroundColorClass = computed(() => {
+  const bgToken = config.footer?.backgroundColor || '#E3D5D4'
+  return resolveColorToken(bgToken, 'bg')
+})
+
+const footerTextColorClass = computed(() => {
+  const textToken = config.footer?.textColor || 'accentColor1'
+  return resolveColorToken(textToken, 'text')
+})
+
+const footerDividerColorClass = computed(() => {
+  const textToken = config.footer?.textColor || 'accentColor1'
+  return resolveColorToken(textToken, 'bg')
+})
 
 // CSS variables for responsive sizes from common.json via app.config
 const responsiveCSSVars = computed(() => {

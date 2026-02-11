@@ -63,9 +63,9 @@ export function resolveColorToken(
     return ''
   }
 
-  // If it's a hex value, return as-is for inline styles
+  // If it's a hex value, format as Tailwind arbitrary value
   if (token.startsWith('#')) {
-    return token
+    return `${prefix}-[${token}]`
   }
 
   // Check if it's a base color

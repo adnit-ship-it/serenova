@@ -92,7 +92,8 @@
                     "button": {
                         "text": "Buy Now",
                         "type": "button",
-                        "color": "accentColor1",
+                        "color": "white",
+                        "backgroundColor": "accentColor1",
                         "show": true
                     }
                 }
@@ -148,7 +149,7 @@
                 "button": {
                     "text": "Start Today",
                     "type": "button",
-                    "color": "accentColor1",
+                    "color": "white",
                     "backgroundColor": "accentColor1",
                     "show": true
                 },

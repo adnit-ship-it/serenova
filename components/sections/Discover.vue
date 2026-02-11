@@ -36,7 +36,7 @@
             <NuxtLink :to="`/consultation?productId=${product?.id || ''}`">
               <UiButton 
                 :background-color="buttonBackgroundColor" 
-                textColor="white" 
+                :text-color="buttonTextColor" 
                 width="full" 
                 height="32px" 
                 fontSize="16"
@@ -147,9 +147,21 @@ const bodyTextColorClass = computed(() => {
   return resolveColorToken('bodyColor', 'text')
 })
 
-// Button background color
+// Button colors from JSON
 const buttonBackgroundColor = computed(() => {
-  return productCard.value?.button?.color || 'accentColor1'
+  // Check backgroundColor first, fall back to color for backward compatibility
+  return productCard.value?.button?.backgroundColor 
+      || productCard.value?.button?.color 
+      || 'accentColor1'
+})
+
+const buttonTextColor = computed(() => {
+  // Only use color as text color if backgroundColor is explicitly set
+  // Otherwise default to white since color was used as background in old pattern
+  if (productCard.value?.button?.backgroundColor) {
+    return productCard.value?.button?.color || 'white'
+  }
+  return 'white'
 })
 </script>
 

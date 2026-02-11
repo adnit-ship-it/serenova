@@ -46,7 +46,9 @@
         "logo": {
             "src": "/assets/images/brand/logo-primary-1.svg",
             "alt": "Serenova primary logo"
-        }
+        },
+        "backgroundColor": "accentColor1",
+        "textColor": "white"
     },
     "footer": {
         "heights": {
@@ -57,7 +59,9 @@
         "logo": {
             "src": "/assets/images/brand/logo-primary-1.svg",
             "alt": "Serenova secondary logo"
-        }
+        },
+        "backgroundColor": "#E3D5D4",
+        "textColor": "accentColor1"
     },
     "announcement": {
         "enabled": true,
