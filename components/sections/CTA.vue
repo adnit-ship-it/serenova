@@ -42,21 +42,23 @@
             {{ subheading?.text }}
           </p>
 
-          <div class="flex flex-col lg:flex-row gap-2 lg:gap-7 pt-4 lg:pt-5">
-            <UiButton 
-              v-for="(button, index) in displayButtons"
-              :key="index"
-              v-if="button && button.show !== false"
-              v-motion 
-              v-bind="fadeUpSubtle(200 + (index * 50))"
-              ghost 
-              decorative 
-              :width="isMobile ? '145px' : '320px'" 
-              :height="isMobile ? '24px' : '44px'"
-              :font-size="isMobile ? '12' : '24'"
-            >
-              {{ button.text }}
-            </UiButton>
+          <div class="cta-buttons flex flex-col lg:flex-row gap-2 lg:gap-7 pt-4 lg:pt-5" :style="buttonCSSVars">
+            <template v-for="(button, index) in displayButtons" :key="index">
+              <UiButton 
+                v-if="button.show !== false"
+                v-motion 
+                v-bind="fadeUpSubtle(200 + (index * 50))"
+                ghost 
+                decorative 
+                :background-color="button.backgroundColor || 'white'"
+                :text-color="button.color || 'accentColor1'"
+                width="var(--cta-button-width)" 
+                height="var(--cta-button-height)"
+                font-size="var(--cta-button-font-size)"
+              >
+                {{ button.text }}
+              </UiButton>
+            </template>
           </div>
 
           <div class="pt-7 lg:pt-[50px] grid grid-cols-2 gap-x-4 lg:gap-x-10 gap-y-2 lg:gap-y-4 font-medium  lg:max-w-[66%]">
@@ -137,6 +139,13 @@ const bulletPointsItems = computed(() => {
   return bulletPoints.value?.items || []
 })
 
+// CSS variables for responsive button sizing (avoids SSR hydration mismatch)
+const buttonCSSVars = {
+  '--cta-button-width': '320px',
+  '--cta-button-height': '44px',
+  '--cta-button-font-size': '24px'
+}
+
 // Responsive height for foreground image
 const foregroundHeight = computed(() => {
   if (!media.value?.product) return '222px';
@@ -171,5 +180,12 @@ const backgroundClass = computed(() => {
 </script>
 
 <style scoped>
-/* Component styles can be added here */
+/* Responsive button sizing using CSS variables - no JS flicker */
+@media (min-width: 1024px) {
+  .cta-buttons {
+    --cta-button-width: 120px;
+    --cta-button-height: 44px;
+    --cta-button-font-size: 24px;
+  }
+}
 </style>

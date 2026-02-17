@@ -62,9 +62,9 @@
             <UiButton 
               :background-color="ctaButtonBackgroundColor" 
               :text-color="ctaButtonTextColor" 
-              :width="buttonWidth" 
-              :height="buttonHeight"
-              :font-size="buttonFontSize"
+              width="var(--hero-button-width)" 
+              height="var(--hero-button-height)"
+              font-size="var(--hero-button-font-size)"
             >
               {{ ctaButton?.text }}
             </UiButton>
@@ -80,12 +80,10 @@
 
 <script setup>
 import { computed } from "vue";
-import { useBreakpoints } from "~/composables/useBreakpoints";
 import { useMotionPresets } from "~/composables/useMotionPresets";
 import { resolveColorToken, resolveIconColor } from "~/utils/colorTokens";
 
 // Composables
-const { isMobile } = useBreakpoints()
 const { fadeUp } = useMotionPresets()
 
 // Define props
@@ -124,13 +122,12 @@ const responsiveCSSVars = computed(() => ({
   '--hero-logo-height-desktop': logo.value?.sizes?.desktop || 'auto',
   '--hero-foreground-height': media.value?.foreground?.sizes?.mobile || 'auto',
   '--hero-foreground-height-tablet': media.value?.foreground?.sizes?.tablet || media.value?.foreground?.sizes?.desktop || 'auto',
-  '--hero-foreground-height-desktop': media.value?.foreground?.sizes?.desktop || 'auto'
+  '--hero-foreground-height-desktop': media.value?.foreground?.sizes?.desktop || 'auto',
+  // Button sizing (mobile defaults, overridden by CSS media queries)
+  '--hero-button-width': '320px',
+  '--hero-button-height': '48px',
+  '--hero-button-font-size': '24px'
 }))
-
-// Button sizes (global/consistent across site)
-const buttonWidth = computed(() => (isMobile.value ? "192px" : "320px"))
-const buttonHeight = computed(() => (isMobile.value ? "28px" : "48px"))
-const buttonFontSize = computed(() => (isMobile.value ? "16" : "24"))
 
 // Bullet points items
 const bulletPointsItems = computed(() => {
@@ -193,6 +190,21 @@ const ctaButtonTextColor = computed(() => {
 @media (min-width: 1024px) {
   .hero-foreground-desktop {
     height: var(--hero-foreground-height-desktop);
+  }
+}
+
+/* Responsive button sizing using CSS variables - no JS flicker */
+.hero-section {
+  --hero-button-width: 192px;
+  --hero-button-height: 28px;
+  --hero-button-font-size: 16px;
+}
+
+@media (min-width: 768px) {
+  .hero-section {
+    --hero-button-width: 320px;
+    --hero-button-height: 48px;
+    --hero-button-font-size: 24px;
   }
 }
 </style>

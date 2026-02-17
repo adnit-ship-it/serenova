@@ -97,7 +97,13 @@ const buttonClasses = computed(() => {
   if (props.decorative) {
     // Decorative buttons don't have pointer cursor or button-specific interactions
     if (props.variant === "ghost" || props.ghost) {
-      return `${baseClasses} border border-accentColor1 text-accentColor1 bg-white`;
+      // Use textColor for both text and border, backgroundColor for bg
+      const colorValue = props.textColor || 'accentColor1';
+      const bgValue = props.backgroundColor || 'white';
+      const ghostTextClass = colorValue.startsWith('text-') ? colorValue : `text-${colorValue}`;
+      const ghostBorderClass = colorValue.startsWith('border-') ? colorValue : `border-${colorValue}`;
+      const ghostBgClass = bgValue.startsWith('bg-') ? bgValue : `bg-${bgValue}`;
+      return `${baseClasses} border ${ghostBorderClass} ${ghostTextClass} ${ghostBgClass}`;
     } else if (props.variant === "disabled" || props.disabled) {
       return `${baseClasses} bg-gray-300 text-gray-500`;
     } else if (props.variant === "loading" || props.loading) {
@@ -108,7 +114,13 @@ const buttonClasses = computed(() => {
   } else {
     // Regular buttons with pointer cursor and button interactions
     if (props.variant === "ghost" || props.ghost) {
-      return `${baseClasses} border border-accentColor1 text-accentColor1 bg-white cursor-pointer`;
+      // Use textColor for both text and border, backgroundColor for bg
+      const colorValue = props.textColor || 'accentColor1';
+      const bgValue = props.backgroundColor || 'white';
+      const ghostTextClass = colorValue.startsWith('text-') ? colorValue : `text-${colorValue}`;
+      const ghostBorderClass = colorValue.startsWith('border-') ? colorValue : `border-${colorValue}`;
+      const ghostBgClass = bgValue.startsWith('bg-') ? bgValue : `bg-${bgValue}`;
+      return `${baseClasses} border ${ghostBorderClass} ${ghostTextClass} ${ghostBgClass} cursor-pointer`;
     } else if (props.variant === "disabled" || props.disabled) {
       return `${baseClasses} bg-gray-300 text-gray-500 cursor-not-allowed`;
     } else if (props.variant === "loading" || props.loading) {
@@ -120,10 +132,15 @@ const buttonClasses = computed(() => {
 });
 
 const buttonStyles = computed(() => {
+  // Handle CSS variable values for responsive sizing
+  const fontSizeValue = props.fontSize?.startsWith?.('var(') 
+    ? props.fontSize 
+    : `${props.fontSize}px`;
+  
   const baseStyles = {
     height: props.height,
     width: props.width === "full" ? "100%" : props.width,
-    fontSize: `${props.fontSize}px`,
+    fontSize: fontSizeValue,
   }
 
   // Only apply color inline styles for default variant (not ghost/disabled/loading)
@@ -143,6 +160,18 @@ const buttonStyles = computed(() => {
     // BULLETPROOF: Inline styles always work, even if Tailwind class doesn't generate
     baseStyles.backgroundColor = backgroundColorHex
     baseStyles.color = colorHex
+  }
+
+  // Ghost button inline style fallback - use textColor for text/border, backgroundColor for bg
+  if (props.ghost || props.variant === 'ghost') {
+    const colorToken = props.textColor || 'accentColor1';
+    const bgToken = props.backgroundColor || 'white';
+    const rawColorToken = colorToken.startsWith('text-') ? colorToken.slice(5) : colorToken;
+    const rawBgToken = bgToken.startsWith('bg-') ? bgToken.slice(3) : bgToken;
+    
+    baseStyles.color = resolveIconColor(rawColorToken);
+    baseStyles.borderColor = resolveIconColor(rawColorToken);
+    baseStyles.backgroundColor = resolveIconColor(rawBgToken);
   }
 
   return baseStyles

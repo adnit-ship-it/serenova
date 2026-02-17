@@ -4,14 +4,14 @@
         "components": [
             {
                 "logo": {
-                    "src": "/assets/images/brand/logo-primary-1.svg",
+                    "src": "/assets/images/brand/logo-secondary-1.svg",
                     "alt": "brand logo",
                     "type": "svg-image",
                     "show": true,
                     "sizes": {
                         "mobile": "34px",
                         "tablet": "38px",
-                        "desktop": "62px"
+                        "desktop": "115px"
                     }
                 },
                 "heading": {
@@ -43,7 +43,7 @@
                     "type": "button",
                     "text": "Take the Assessment",
                     "color": "white",
-                    "backgroundColor": "accentColor1",
+                    "backgroundColor": "accentColor2",
                     "show": true
                 },
                 "media": {
@@ -55,9 +55,9 @@
                         "src": "/assets/images/brand/hero-img.png",
                         "alt": "Hand holding a GLP-1 medication vial",
                         "sizes": {
-                            "mobile": "222px",
-                            "tablet": "480px",
-                            "desktop": "600px"
+                            "mobile": "262px",
+                            "tablet": "264px",
+                            "desktop": "500px"
                         }
                     }
                 }
@@ -246,14 +246,14 @@
                         "text": "1000+ Patients",
                         "type": "button",
                         "color": "accentColor1",
-                        "backgroundColor": "accentColor1",
+                        "backgroundColor": "white",
                         "show": true
                     },
                     {
                         "text": "Worldwide Care",
                         "type": "button",
                         "color": "accentColor1",
-                        "backgroundColor": "accentColor1",
+                        "backgroundColor": "white",
                         "show": true
                     }
                 ]
@@ -510,7 +510,7 @@
                     "show": true,
                     "type": "bulletpoints",
                     "icon": {
-                        "src": "/assets/images/checkmark.svg",
+                        "src": "/assets/images/checkmark-star.svg",
                         "color": "accentColor1"
                     },
                     "items": [
@@ -540,8 +540,8 @@
                         }
                     ],
                     "bulletpointIcon": {
-                        "src": "/assets/images/checkmark.svg",
-                        "color": "accentColor1"
+                        "src": "/assets/images/checkmark-star.svg",
+                        "color": "#AA992C"
                     }
                 }
             }

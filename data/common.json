@@ -64,7 +64,7 @@
         "textColor": "accentColor1"
     },
     "announcement": {
-        "enabled": true,
+        "enabled": false,
         "text": "Limited time offer: 20% off your first consultation!",
         "link": "/consultation",
         "backgroundColor": "#750021",

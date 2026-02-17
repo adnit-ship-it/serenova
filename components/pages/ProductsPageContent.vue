@@ -17,7 +17,7 @@
           <UiButton 
             @click="selectedCategory = 'all'"
             :ghost="selectedCategory !== 'all'"
-            v-motion v-bind="fadeUp(75)" :width="buttonWidth" :height="buttonHeight" :font-size="buttonFontSize" background-color="accentColor2">
+            v-motion v-bind="fadeUp(75)" width="var(--products-button-width)" height="var(--products-button-height)" font-size="var(--products-button-font-size)" background-color="accentColor2">
             All
           </UiButton>
           
@@ -27,7 +27,7 @@
             :key="category"
             @click="selectedCategory = category"
             :ghost="selectedCategory !== category"
-            v-motion v-bind="fadeUp(75)" :width="buttonWidth" :height="buttonHeight" :font-size="buttonFontSize" background-color="accentColor2">
+            v-motion v-bind="fadeUp(75)" width="var(--products-button-width)" height="var(--products-button-height)" font-size="var(--products-button-font-size)" background-color="accentColor2">
             {{ categoryLabels[category] }}
           </UiButton>
         </div>
@@ -50,7 +50,6 @@ import { usePagesStore } from '~/stores/pagesStore';
 import { products as staticProducts, categoryLabels } from '~/data/intake-form/products';
 import type { ProductCategory } from '~/types/intake-form/checkout';
 import type { PageConfig, PageSectionReference } from '~/types/pages';
-import { useBreakpoints } from '~/composables/useBreakpoints';
 import { useMotionPresets } from '~/composables/useMotionPresets';
 
 const props = defineProps<{
@@ -62,7 +61,6 @@ const crmStore = useCRMStore();
 const pagesStore = usePagesStore();
 
 // Use shared composables
-const { isMobile } = useBreakpoints();
 const { fadeUp } = useMotionPresets();
 
 // Get Products Hero section data from sections.json
@@ -77,17 +75,16 @@ const productsHeroData = computed(() => {
 // Get logo from section data
 const productsLogo = computed(() => productsHeroData.value?.logo)
 
-// CSS variables for responsive logo sizes
+// CSS variables for responsive sizes (logo and buttons)
 const responsiveCSSVars = computed(() => ({
   '--products-logo-height': productsLogo.value?.sizes?.mobile || '34px',
   '--products-logo-height-tablet': productsLogo.value?.sizes?.tablet || productsLogo.value?.sizes?.desktop || '38px',
-  '--products-logo-height-desktop': productsLogo.value?.sizes?.desktop || '62px'
+  '--products-logo-height-desktop': productsLogo.value?.sizes?.desktop || '62px',
+  // Button sizing (mobile defaults, overridden by CSS media queries)
+  '--products-button-width': '144px',
+  '--products-button-height': '20px',
+  '--products-button-font-size': '12px'
 }))
-
-// Derived button sizes
-const buttonWidth = computed(() => (isMobile.value ? "144px" : "320px"));
-const buttonHeight = computed(() => (isMobile.value ? "20px" : "44px"));
-const buttonFontSize = computed(() => (isMobile.value ? "12" : "24"));
 
 // Category filter state - defaults to 'all'
 const selectedCategory = ref<'all' | ProductCategory>('all' as 'all' | ProductCategory);
@@ -199,6 +196,15 @@ const getAdditionalPropsForSection = (section: PageSectionReference) => {
 @media (min-width: 1024px) {
   .products-logo {
     height: var(--products-logo-height-desktop);
+  }
+}
+
+/* Responsive button sizing using CSS variables - no JS flicker */
+@media (min-width: 768px) {
+  .products-page {
+    --products-button-width: 320px;
+    --products-button-height: 44px;
+    --products-button-font-size: 24px;
   }
 }
 </style>

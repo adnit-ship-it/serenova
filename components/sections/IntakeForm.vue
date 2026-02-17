@@ -1,5 +1,5 @@
 <template>
-    <div class="w-full flex justify-center">
+    <div class="intake-form-section w-full flex justify-center" :style="buttonCSSVars">
         <div class="w-full flex flex-col py-20 pt-0 md:py-24 px-6 lg:px-0 max-w-[1056px]">
             <div class="flex items-center justify-start gap-1 lg:gap-3 max-w-[1050px]">
                 <div class="h-[10px] w-[10px] md:w-4 md:h-4 lg:h-6 lg:w-6 rounded-full bg-accentColor1"></div>
@@ -47,7 +47,7 @@
                 </div>
             </div>
             <NuxtLink class="mt-6 md:pt-4" to="/consultation">
-                <UiButton :width="buttonWidth" :height="buttonHeight" :font-size="buttonFontSize">
+                <UiButton width="var(--intake-button-width)" height="var(--intake-button-height)" font-size="var(--intake-button-font-size)">
                     <div class="w-[56px] h-[18px] md:w-[85px] md:h-[30px]">
                         <svg class="h-full w-full" viewBox="0 0 38 9" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path
@@ -63,11 +63,7 @@
 
 <script setup>
 import { computed } from "vue";
-import { useBreakpoints } from "~/composables/useBreakpoints";
 import { resolveColorToken } from '~/utils/colorTokens';
-
-// Composables
-const { isMobile } = useBreakpoints()
 
 // Define props
 const props = defineProps({
@@ -77,10 +73,12 @@ const props = defineProps({
   }
 })
 
-// Derived button sizes (global/consistent across site)
-const buttonWidth = computed(() => (isMobile.value ? "144px" : "170px"));
-const buttonHeight = computed(() => (isMobile.value ? "28px" : "44px"));
-const buttonFontSize = computed(() => (isMobile.value ? "16" : "24"));
+// CSS variables for responsive button sizing (avoids SSR hydration mismatch)
+const buttonCSSVars = {
+  '--intake-button-width': '144px',
+  '--intake-button-height': '28px',
+  '--intake-button-font-size': '16px'
+};
 
 // Map hardcoded colors to base colors
 // bg-[#dddddd] -> bodyColor (light gray)
@@ -100,3 +98,14 @@ const inputBorderClass = computed(() => {
   return resolveColorToken('bodyColor', 'border') + ' border'
 })
 </script>
+
+<style scoped>
+/* Responsive button sizing using CSS variables - no JS flicker */
+@media (min-width: 768px) {
+  .intake-form-section {
+    --intake-button-width: 170px;
+    --intake-button-height: 44px;
+    --intake-button-font-size: 24px;
+  }
+}
+</style>
