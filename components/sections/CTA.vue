@@ -7,8 +7,8 @@
     <UiSectionContainer class="flex md:flex-row-reverse pb-8 md:pb-0">
       <div 
         v-if="media?.product?.src"
-        class="absolute bottom-0 right-0 z-20 max-h-[320px] md:max-h-[384px] lg:max-h-[480px]" 
-        :style="{ height: foregroundHeight }"
+        class="cta-foreground absolute bottom-0 right-0 z-20 max-h-[320px] md:max-h-[384px] lg:max-h-[480px]" 
+        :style="foregroundCSSVars"
       >
         <img 
           :src="media?.product?.src" 
@@ -82,12 +82,10 @@
 
 <script setup>
 import { computed } from "vue";
-import { useBreakpoints } from "~/composables/useBreakpoints";
 import { useMotionPresets } from "~/composables/useMotionPresets";
 import { resolveColorToken, resolveIconColor } from '~/utils/colorTokens';
 
 // Composables
-const { isMobile } = useBreakpoints()
 const { fadeUpSubtle } = useMotionPresets()
 
 // Define props
@@ -141,17 +139,16 @@ const bulletPointsItems = computed(() => {
 
 // CSS variables for responsive button sizing (avoids SSR hydration mismatch)
 const buttonCSSVars = {
-  '--cta-button-width': '320px',
-  '--cta-button-height': '44px',
-  '--cta-button-font-size': '24px'
+  '--cta-button-width': '145px',
+  '--cta-button-height': '24px',
+  '--cta-button-font-size': '12px'
 }
 
-// Responsive height for foreground image
-const foregroundHeight = computed(() => {
-  if (!media.value?.product) return '222px';
-  if (isMobile.value) return '320px';
-  return 'auto';
-});
+// CSS variables for responsive foreground image height (avoids SSR hydration mismatch)
+const foregroundCSSVars = {
+  '--cta-foreground-height': '320px',
+  height: 'var(--cta-foreground-height)'
+}
 
 // Resolve color classes using color utilities
 const headingColorClass = computed(() => {
@@ -183,9 +180,16 @@ const backgroundClass = computed(() => {
 /* Responsive button sizing using CSS variables - no JS flicker */
 @media (min-width: 1024px) {
   .cta-buttons {
-    --cta-button-width: 120px;
+    --cta-button-width: 320px;
     --cta-button-height: 44px;
     --cta-button-font-size: 24px;
+  }
+}
+
+/* Responsive foreground image height - no JS flicker */
+@media (min-width: 768px) {
+  .cta-foreground {
+    --cta-foreground-height: auto;
   }
 }
 </style>

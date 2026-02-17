@@ -73,11 +73,9 @@
 <script setup>
 import { ref, onMounted, onUnmounted, computed, nextTick } from "vue";
 import { resolveColorToken, resolveIconColor } from '~/utils/colorTokens';
-import { useBreakpoints } from '~/composables/useBreakpoints';
 import { useMotionPresets } from '~/composables/useMotionPresets';
 
 // Use shared composables
-const { isTablet: isTabletBreakpoint } = useBreakpoints();
 const { fadeUpSubtle, fadeUpMinimal } = useMotionPresets();
 
 // Define props
