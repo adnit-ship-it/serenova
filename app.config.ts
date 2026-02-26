@@ -1,3 +1,13 @@
+/**
+ * App Configuration
+ * 
+ * This file imports data from JSON files (common.json, media.json) at BUILD TIME.
+ * Changes to these JSON files require a dev server restart to take effect.
+ * 
+ * For hot-reload during development, the server must be restarted after modifying:
+ * - data/common.json (navbar, footer, announcement, sectionSpacing, strings, etc.)
+ * - data/media.json (icon/logo/image registries)
+ */
 import common from './data/common.json'
 import media from './data/media.json'
 

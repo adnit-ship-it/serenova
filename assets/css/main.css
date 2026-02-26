@@ -24,18 +24,32 @@
 @layer base {
   html {
     font-family: "Quicksand", "Inter", sans-serif;
-    
-    /* Header height defaults (overridden by Vue via inline styles) */
-    --navbar-height: 83px;
-    --announcement-height: 0px;
-    --header-offset: 83px;
   }
-  
-  /* Tablet and desktop breakpoints */
-  @media (min-width: 768px) {
-    html {
-      --navbar-height: 68px;
-      --header-offset: 68px;
-    }
+}
+
+/* 
+ * CSS variable defaults - these are fallback values
+ * Actual values are set by:
+ * - responsive-layout.ts plugin (global variables from common.json config)
+ * - Individual components (via inline styles reading from useAppConfig())
+ * 
+ * Note: Changes to common.json require a dev server restart to take effect.
+ */
+:root {
+  --navbar-height: 83px;
+  --announcement-height: 0px;
+  --header-offset: calc(var(--navbar-height) + var(--announcement-height));
+  --section-gap-default: 48px;
+}
+
+@media (min-width: 768px) {
+  :root {
+    --navbar-height: 68px;
+  }
+}
+
+@media (min-width: 1024px) {
+  :root {
+    --navbar-height: 68px;
   }
 }

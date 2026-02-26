@@ -4,7 +4,7 @@
       'navbar w-full fixed z-50 flex justify-center shadow-lg',
       navbarBackgroundColorClass
     ]"
-    :style="{ ...responsiveCSSVars, top: 'var(--announcement-height, 0px)' }"
+    :style="navbarStyles"
   >
     <div v-motion v-bind="fadeUpMinimal()" :class="[
         'navbar-inner lg:max-w-[1328px] w-full flex justify-center px-4 md:px-8 pb-2 md:pb-0',
@@ -100,13 +100,13 @@ const props = defineProps({
 const navbarLogoSrc = computed(() => config.navbar.logo.src);
 const navbarLogoAlt = computed(() => config.navbar.logo.alt || config.strings.accessibility.brandLogo || "Brand logo");
 
-// Navbar colors from config - prop overrides config
+// Navbar colors from config - prop overrides config only when explicitly provided
 const navbarBackgroundColorClass = computed(() => {
-  // If color prop is provided, use it (for backward compatibility)
-  if (props.color && props.color !== 'bg-white') {
+  // If color prop is explicitly provided (not the default), use it for backward compatibility
+  if (props.color !== 'bg-white') {
     return props.color
   }
-  // Otherwise use config
+  // Otherwise use config value from common.json
   const bgToken = config.navbar?.backgroundColor || 'accentColor1'
   return resolveColorToken(bgToken, 'bg')
 })
@@ -120,15 +120,25 @@ const navbarTextColorClass = computed(() => {
 const responsiveCSSVars = computed(() => {
   const logoSizes = config.logoSizes?.navbar
   const heights = config.navbar.heights
+  const announcementEnabled = config.announcement?.enabled
+  const announcementHeights = announcementEnabled ? config.announcement.heights : null
   return {
     '--navbar-height': heights?.mobile || '83px',
     '--navbar-height-tablet': heights?.tablet || heights?.desktop || '68px',
     '--navbar-height-desktop': heights?.desktop || '68px',
     '--navbar-logo-height': logoSizes?.height?.mobile || '24px',
     '--navbar-logo-height-tablet': logoSizes?.height?.tablet || logoSizes?.height?.desktop || '28px',
-    '--navbar-logo-height-desktop': logoSizes?.height?.desktop || '28px'
+    '--navbar-logo-height-desktop': logoSizes?.height?.desktop || '28px',
+    '--navbar-top': announcementHeights?.mobile || '0px',
+    '--navbar-top-tablet': announcementHeights?.tablet || '0px',
+    '--navbar-top-desktop': announcementHeights?.desktop || '0px'
   }
 })
+
+// Combined navbar styles including positioning
+const navbarStyles = computed(() => ({
+  ...responsiveCSSVars.value
+}))
 
 // Mobile menu state
 const isMobileMenuOpen = ref(false);
@@ -161,6 +171,23 @@ onUnmounted(() => {
 </script>
 
 <style scoped>
+/* Responsive navbar positioning below announcement bar */
+.navbar {
+  top: var(--navbar-top);
+}
+
+@media (min-width: 768px) {
+  .navbar {
+    top: var(--navbar-top-tablet);
+  }
+}
+
+@media (min-width: 1024px) {
+  .navbar {
+    top: var(--navbar-top-desktop);
+  }
+}
+
 /* Responsive navbar height using CSS variables - no JS flicker */
 .navbar-inner {
   height: var(--navbar-height);

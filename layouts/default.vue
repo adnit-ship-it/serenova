@@ -1,7 +1,7 @@
 <template>
   <div class="min-h-screen bg-white flex flex-col">
     <LayoutAnnouncementBar v-if="config.announcement.enabled" />
-    <LayoutNavbar color="bg-accentColor1" :hideNavigation="isCheckoutOrConsultationPage" />
+    <LayoutNavbar :hideNavigation="isCheckoutOrConsultationPage" />
     <main class="flex-1 pt-[var(--header-offset)]">
       <slot />
     </main>
