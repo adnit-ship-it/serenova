@@ -1,83 +1,83 @@
 {
-    "iconRegistry": {
-        "check": {
-            "type": "check",
-            "path": "/assets/images/brand/check.svg",
-            "description": "Checkmark icon"
-        },
-        "checkmark": {
-            "type": "checkmark",
-            "path": "/assets/images/checkmark.svg",
-            "description": "Standard checkmark icon"
-        },
-        "checkmark-star": {
-            "type": "checkmark-star",
-            "path": "/assets/images/checkmark-star.svg",
-            "description": "Checkmark with star icon"
-        },
-        "checkmark-star-brown": {
-            "type": "checkmark-star-brown",
-            "path": "/assets/images/checkmark-star-brown.svg",
-            "description": "Brown checkmark with star icon"
-        },
-        "check-circle": {
-            "type": "check-circle",
-            "path": "/assets/images/intake-form/icons/check_circle.svg",
-            "description": "Checkmark in circle icon"
-        }
+  "iconRegistry": {
+    "check": {
+      "type": "check",
+      "path": "/assets/images/brand/check.svg",
+      "description": "Checkmark icon"
     },
-    "logoRegistry": {
-        "primary": {
-            "type": "primary",
-            "path": "/assets/images/brand/logo-primary-1.svg",
-            "description": "Primary brand logo (used in navbar)"
-        },
-        "secondary": {
-            "type": "secondary",
-            "path": "/assets/images/brand/logo-secondary-1.svg",
-            "description": "Secondary/alternative brand logo (used in footer)"
-        }
+    "checkmark": {
+      "type": "checkmark",
+      "path": "/assets/images/checkmark.svg",
+      "description": "Standard checkmark icon"
     },
-    "imageRegistry": {
-        "hero-bg": {
-            "id": "hero-bg",
-            "path": "/assets/images/brand/hero-bg.png",
-            "alt": "Hero background"
-        },
-        "hero-img": {
-            "id": "hero-img",
-            "path": "/assets/images/brand/hero-img.png",
-            "alt": "Hero image"
-        },
-        "discover-bg": {
-            "id": "discover-bg",
-            "path": "/assets/images/discover-bg.png",
-            "alt": "Discover section background"
-        },
-        "before-after-1": {
-            "id": "before-after-1",
-            "path": "/assets/images/before-after/1.png",
-            "alt": "Before after transformation 1"
-        },
-        "before-after-2": {
-            "id": "before-after-2",
-            "path": "/assets/images/before-after/2.png",
-            "alt": "Before after transformation 2"
-        },
-        "before-after-3": {
-            "id": "before-after-3",
-            "path": "/assets/images/before-after/3.png",
-            "alt": "Before after transformation 3"
-        },
-        "products-hero": {
-            "id": "products-hero",
-            "path": "/assets/images/products.png",
-            "alt": "Products hero image"
-        },
-        "wl-graph": {
-            "id": "wl-graph",
-            "path": "/assets/images/wl-graph.png",
-            "alt": "Weight loss graph"
-        }
+    "checkmark-star": {
+      "type": "checkmark-star",
+      "path": "/assets/images/checkmark-star.svg",
+      "description": "Checkmark with star icon"
+    },
+    "checkmark-star-brown": {
+      "type": "checkmark-star-brown",
+      "path": "/assets/images/checkmark-star-brown.svg",
+      "description": "Brown checkmark with star icon"
+    },
+    "check-circle": {
+      "type": "check-circle",
+      "path": "/assets/images/intake-form/icons/check_circle.svg",
+      "description": "Checkmark in circle icon"
     }
+  },
+  "logoRegistry": {
+    "primary": {
+      "type": "primary",
+      "path": "/assets/images/brand/logo-primary-1.svg",
+      "description": "Primary brand logo (used in navbar)"
+    },
+    "secondary": {
+      "type": "secondary",
+      "path": "/assets/images/brand/logo-secondary-1.svg",
+      "description": "Secondary/alternative brand logo (used in footer)"
+    }
+  },
+  "imageRegistry": {
+    "hero-bg": {
+      "id": "hero-bg",
+      "path": "/assets/images/brand/hero-bg.png",
+      "alt": "Hero background"
+    },
+    "hero-img": {
+      "id": "hero-img",
+      "path": "/assets/images/brand/hero-img.png",
+      "alt": "Hero image"
+    },
+    "discover-bg": {
+      "id": "discover-bg",
+      "path": "/assets/images/discover-bg.png",
+      "alt": "Discover section background"
+    },
+    "before-after-1": {
+      "id": "before-after-1",
+      "path": "/assets/images/before-after/1.png",
+      "alt": "Before after transformation 1"
+    },
+    "before-after-2": {
+      "id": "before-after-2",
+      "path": "/assets/images/before-after/2.png",
+      "alt": "Before after transformation 2"
+    },
+    "before-after-3": {
+      "id": "before-after-3",
+      "path": "/assets/images/before-after/3.png",
+      "alt": "Before after transformation 3"
+    },
+    "products-hero": {
+      "id": "products-hero",
+      "path": "/assets/images/products.png",
+      "alt": "Products hero image"
+    },
+    "wl-graph": {
+      "id": "wl-graph",
+      "path": "/assets/images/wl-graph.png",
+      "alt": "Weight loss graph"
+    }
+  }
 }
