@@ -5,7 +5,7 @@ export function useSectionSpacing() {
   // When no override, uses --section-gap-default from :root (injected by responsive-layout plugin)
   const getSectionGap = (section: PageSectionReference, position: 'before' | 'after'): string => {
     const override = position === 'before' ? section.gapBefore : section.gapAfter
-    return override || 'var(--section-gap-default)'
+    return override ?? 'var(--section-gap-default)'
   }
 
   // Get margin style for a section based on its position in the list

@@ -1,5 +1,8 @@
 import { computed } from 'vue'
 import { useBrandingStore } from '~/stores/branding'
+import designTokens from '~/data/designTokens.json'
+
+const primaryColors = designTokens.colors?.primary || {}
 
 /**
  * Utility function to get dynamic brand colors from the API
@@ -20,12 +23,12 @@ export function useBrandColors() {
       }
     }
     
-    // Fallback to static design tokens
+    // Fallback to designTokens.json (single source of truth)
     return {
-      backgroundColor: '#FDFAF6',
-      bodyColor: '#000000',
-      accentColor1: '#A75809',
-      accentColor2: '#F8F2EC',
+      backgroundColor: primaryColors.background ?? '#FDFAF6',
+      bodyColor: primaryColors.body ?? '#000000',
+      accentColor1: primaryColors.accent1 ?? '#750021',
+      accentColor2: primaryColors.accent2 ?? '#AA7585',
     }
   }
   

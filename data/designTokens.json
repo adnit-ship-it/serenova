@@ -3,15 +3,8 @@
     "primary": {
       "background": "#FDFAF6",
       "body": "#000000",
-      "accent1": "#A75809",
-      "accent2": "#F8F2EC",
-      "cta": "#E3D5D4"
-    },
-    "semantic": {
-      "success": "#10B981",
-      "error": "#EF4444",
-      "warning": "#F59E0B",
-      "info": "#3B82F6"
+      "accent1": "#750021",
+      "accent2": "#AA7585"
     }
   },
   "fonts": {

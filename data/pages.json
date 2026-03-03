@@ -10,14 +10,18 @@
         "component": "SectionsHero",
         "props": {},
         "show": true,
-        "order": 1
+        "order": 1,
+        "gapBefore": null,
+        "gapAfter": "123px"
       },
       {
         "name": "Home Discover",
         "component": "SectionsDiscover",
         "props": {},
         "show": true,
-        "order": 2
+        "order": 2,
+        "gapBefore": null,
+        "gapAfter": null
       },
       {
         "name": "Trusted By",
@@ -26,49 +30,63 @@
           "center": true
         },
         "show": true,
-        "order": 3
+        "order": 3,
+        "gapBefore": null,
+        "gapAfter": null
       },
       {
         "name": "Home Journey",
         "component": "SectionsJourney",
         "props": {},
         "show": true,
-        "order": 4
+        "order": 4,
+        "gapBefore": null,
+        "gapAfter": null
       },
       {
         "name": "Home Results",
         "component": "SectionsCTA",
         "props": {},
         "show": true,
-        "order": 5
+        "order": 5,
+        "gapBefore": null,
+        "gapAfter": null
       },
       {
         "name": "Home Before After",
         "component": "SectionsBeforeAfter",
         "props": {},
         "show": true,
-        "order": 6
+        "order": 6,
+        "gapBefore": null,
+        "gapAfter": null
       },
       {
         "name": "Home Products",
         "component": "SectionsProducts",
         "props": {},
         "show": true,
-        "order": 7
+        "order": 7,
+        "gapBefore": null,
+        "gapAfter": null
       },
       {
         "name": "Home FAQ",
         "component": "SectionsFAQ",
         "props": {},
         "show": true,
-        "order": 8
+        "order": 8,
+        "gapBefore": null,
+        "gapAfter": null
       },
       {
         "name": "Home IntakeForm",
         "component": "SectionsIntakeForm",
         "props": {},
         "show": true,
-        "order": 9
+        "order": 9,
+        "gapBefore": null,
+        "gapAfter": null
       }
     ]
   },
@@ -83,21 +101,27 @@
         "component": "SectionsAboutBanner",
         "props": {},
         "show": true,
-        "order": 1
+        "order": 1,
+        "gapBefore": null,
+        "gapAfter": null
       },
       {
         "name": "About Trusted By",
         "component": "SectionsTrustedBy",
         "props": {},
         "show": true,
-        "order": 2
+        "order": 2,
+        "gapBefore": null,
+        "gapAfter": null
       },
       {
         "name": "About Stats",
         "component": "SectionsAboutPriority",
         "props": {},
         "show": true,
-        "order": 3
+        "order": 3,
+        "gapBefore": null,
+        "gapAfter": null
       }
     ]
   },
@@ -145,7 +169,9 @@
         "component": null,
         "props": {},
         "show": true,
-        "order": 1
+        "order": 1,
+        "gapBefore": null,
+        "gapAfter": null
       }
     ]
   },
@@ -163,14 +189,18 @@
         "component": null,
         "props": {},
         "show": true,
-        "order": 1
+        "order": 1,
+        "gapBefore": null,
+        "gapAfter": null
       },
       {
         "name": "Products Discover",
         "component": "SectionsProducts",
         "props": {},
         "show": true,
-        "order": 2
+        "order": 2,
+        "gapBefore": null,
+        "gapAfter": null
       }
     ]
   }

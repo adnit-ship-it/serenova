@@ -18,12 +18,13 @@ const getColorValue = (colorValue: any): string => {
 }
 
 // Safely access colors from tailwind config with type assertion
+// Fallbacks align with designTokens.json (single source of truth)
 const tailwindColors = (tailwindConfig.theme?.extend?.colors as any) || {}
 const BASE_COLORS = {
-  backgroundColor: getColorValue(tailwindColors['backgroundColor']) || '#F5F3ED',
-  bodyColor: getColorValue(tailwindColors['bodyColor']) || '#4A4A4A',
+  backgroundColor: getColorValue(tailwindColors['backgroundColor']) || '#FDFAF6',
+  bodyColor: getColorValue(tailwindColors['bodyColor']) || '#000000',
   accentColor1: getColorValue(tailwindColors['accentColor1']) || '#750021',
-  accentColor2: getColorValue(tailwindColors['accentColor2']) || '#A97585',
+  accentColor2: getColorValue(tailwindColors['accentColor2']) || '#AA7585',
 } as const
 
 // Extended colors (if needed)

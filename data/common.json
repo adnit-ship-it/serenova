@@ -67,12 +67,12 @@
     "enabled": false,
     "text": "Limited time offer: 20% off your first consultation!",
     "link": "/consultation",
-    "backgroundColor": "#750021",
-    "textColor": "#ffffff",
+    "backgroundColor": "accentColor1",
+    "textColor": "white",
     "heights": {
       "mobile": "60px",
       "tablet": "70px",
-      "desktop": "80px"
+      "desktop": "70px"
     }
   },
   "loadingScreen": {

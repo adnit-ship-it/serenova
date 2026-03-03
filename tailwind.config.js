@@ -1,5 +1,8 @@
 import designTokens from './data/designTokens.json'
 
+const colors = designTokens.colors?.primary || {}
+const accent1 = colors.accent1 ?? '#750021'
+
 /** @type {import('tailwindcss').Config} */
 export default {
   content: [
@@ -13,14 +16,14 @@ export default {
   theme: {
     extend: {
       colors: {
-        // Dynamic colors from CSS custom properties (set by branding API)
-        backgroundColor: '#F5F3ED',
-        bodyColor: '#4A4A4A',
+        // Colors from designTokens.json (single source of truth)
+        backgroundColor: colors.background ?? '#FDFAF6',
+        bodyColor: colors.body ?? '#000000',
         accentColor1: {
-          DEFAULT: '#750021',
-          50: 'color-mix(in srgb, #750021 50%, transparent)',
+          DEFAULT: accent1,
+          50: `color-mix(in srgb, ${accent1} 50%, transparent)`,
         },
-        accentColor2: '#A97585',
+        accentColor2: colors.accent2 ?? '#AA7585',
       },
       fontFamily: {
         // Fonts automatically loaded from designTokens.json
