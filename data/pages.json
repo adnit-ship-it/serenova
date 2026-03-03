@@ -12,7 +12,7 @@
         "show": true,
         "order": 1,
         "gapBefore": null,
-        "gapAfter": "123px"
+        "gapAfter": "0px"
       },
       {
         "name": "Home Discover",
@@ -20,7 +20,7 @@
         "props": {},
         "show": true,
         "order": 2,
-        "gapBefore": null,
+        "gapBefore": "0px",
         "gapAfter": null
       },
       {
